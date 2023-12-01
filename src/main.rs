@@ -1,10 +1,12 @@
 mod ser;
-use std::path::PathBuf;
-
 use ser::*;
 
 
 use tokio::*;
+use std::{
+  path::PathBuf,
+  env
+};
 
 
 #[main]
@@ -14,9 +16,10 @@ async fn main() {
   println!("{:?}",&args);
 
   match args {
-    Operation::Build { dir }=> build(dir).await.unwrap(),
+    Operation::Build { dir }=> build(dir).await,
+    Operation::Init { path,template,ts,.. }=> init(path,template,ts).await,
     _=> todo!()
-  }
+  }.unwrap()
 }
 
 async fn build(dir: PathBuf)-> io::Result<()> {
@@ -37,4 +40,28 @@ async fn ensure_dir(path: &PathBuf)-> io::Result<()> {
   fs::create_dir(path).await
 }
 
+async fn init(path: Option<PathBuf>,_template: Option<Box<str>>,ts: bool)-> io::Result<()> {
+  let path=path.unwrap_or(env::current_dir()?);
+  ensure_empty(&path).await?;
 
+  let _url=format!("https://github.com/kakashi-69-xd/proton-xd-templates/{}/{}",lang(ts),"next");
+
+
+
+
+  Ok(())
+}
+
+fn lang(ts: bool)-> Box<str> {
+  match ts {
+    true=> "ts",
+    false=> "js",
+  }.into()
+}
+
+async fn ensure_empty(path: &PathBuf)-> io::Result<()> {
+  match fs::read_dir(path).await?.next_entry().await? {
+    Some(path)=> panic!("{path:?} is not an empty directory!"),
+    None=> Ok(()),
+  }
+}

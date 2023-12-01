@@ -19,8 +19,7 @@ pub enum Operation {
     js: bool
   },
   Init {
-    #[arg(default_value="./")]
-    path: PathBuf,
+    path: Option<PathBuf>,
     #[arg(short='t',long="template")]
     template: Option<Box<str>>,
     #[arg(long="ts")]
@@ -38,17 +37,4 @@ impl Operation {
 
 
 
-
-
-
-// match value.as_ref() {
-//   "next"=> Next,
-//   "react"=> React,
-//   "remix"=> Remix,
-//   "ruck"=> Ruck,
-//   "svelte"=> Svelte,
-//   "sanilla"=> Vanilla,
-//   "vue"=> Vue,
-//   val=> panic!("{val} is not a valid template")
-// }
 
