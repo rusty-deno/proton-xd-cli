@@ -37,11 +37,11 @@ pub enum Operation {
 }
 
 impl Operation {
-  pub fn new<I: IntoIterator<Item=T>,T: Into<std::ffi::OsString>+Clone>(iter: I)-> Self {
-    Self::parse_from(iter)
+  pub fn new()-> Self {
+    Self::parse()
   }
 
-  pub async fn init(self)-> io::Result<()> {
+  pub async fn spawn(self)-> io::Result<()> {
     match self {
       Operation::Build { dir,.. }=> {
         build(dir).await
@@ -50,12 +50,13 @@ impl Operation {
       _=> todo!()
     }
   }
-
-
-
 }
 
+async fn _cwd()-> io::Result<String> {
+  let cwd=env::current_dir()?;
 
+  fs::read_to_string(cwd.join("proton-config.ts")).await
+}
 
 
 

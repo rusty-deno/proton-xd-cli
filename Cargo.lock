@@ -755,6 +755,8 @@ dependencies = [
  "deno_core",
  "log",
  "predicates",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 
