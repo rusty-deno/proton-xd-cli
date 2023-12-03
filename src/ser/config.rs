@@ -12,7 +12,7 @@ pub(crate) enum Value {
   #[serde(rename="*")]
   All,
   Bool(bool),
-  Vec(Box<[String]>)
+  Vec(Box<[Box<str>]>)
 }
 type Val=Option<Value>;
 
@@ -20,6 +20,7 @@ type Val=Option<Value>;
 
 
 #[derive(Deserialize,Debug)]
+#[serde(rename_all="kebab-case")]
 pub(crate) struct Config {
   compiler_options: CompilerOptions,
   permissions: Permissions,
@@ -102,7 +103,7 @@ pub(crate) struct CompilerOptions {
   no_prompt: bool,
   catch_only: Option<bool>,
   location: Option<PathBuf>,
-  v8_flags: Option<Box<[String]>>,
+  v8_flags: Option<Box<[Box<str>]>>,
   seed: Option<u128>,
   check: Option<Box<[PathBuf]>>,
   include: Option<PathBuf>,
@@ -119,12 +120,23 @@ fn _true()-> bool {
 
 
 
-#[test]
-fn xd() {
-  let mut serializer=serde_json::Serializer::new(crate::Writer::new());
-  UnstableOption::BareNodeBuiltins.serialize(&mut serializer).unwrap();
 
 
 
-  println!("{}",serializer.into_inner().to_string())
+#[cfg(test)]
+mod tests {
+  use super::*;
+  use std::fs;
+
+
+  #[test]
+  fn xd() {
+    let config: Config=serde_json::from_str(&fs::read_to_string("./proton-config.json").unwrap()).unwrap();
+
+
+
+
+    println!("{config:?}")
+  }
+
 }
