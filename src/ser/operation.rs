@@ -1,13 +1,12 @@
 
 use tokio::*;
 use clap::Parser;
+use std::path::PathBuf;
+
+
 use crate::api::*;
 use super::build::Build;
 
-use std::{
-  path::PathBuf,
-  env
-};
 
 
 
@@ -54,21 +53,4 @@ impl Operation {
 
 
 
-async fn clone_repo(path: Option<PathBuf>,_template: Option<Box<str>>,ts: bool)-> io::Result<()> {
-  let path=path.unwrap_or(env::current_dir()?);
-  ensure_empty_dir(&path).await?;
-
-  let _url=format!("https://github.com/kakashi-69-xd/proton-xd-templates/{}/{}",lang(ts),"next");
-
-
-
-  Ok(())
-}
-
-fn lang(ts: bool)-> Box<str> {
-  match ts {
-    true=> "ts",
-    false=> "js",
-  }.into()
-}
 
