@@ -43,9 +43,41 @@ pub(crate) struct CompilerOptions {
 
 impl CompilerOptions {
   pub fn new()-> Self {
-    unimplemented!()
+    Default::default()
   }
 }
 
+impl Default for CompilerOptions {
+  fn default()-> Self {
+    Self {
+      no_prompt: true,
+      no_terminal: true,
+      catch_only: Some(true),
+      // none
+      no_check: None,
+      import_map: None,
+      no_remote: None,
+      no_npm: None,
+      node_modules_dir: None,
+      vendor: None,
+      config: None,
+      reload: None,
+      lock: None,
+      lock_write: None,
+      no_lock: None,
+      cert: None,
+      quiet: None,
+      unsafely_ignore_certificate_errors: None,
+      location: None,
+      v8_flags: None,
+      seed: None,
+      check: None,
+      include: None,
+      output: None,
+      target: None,
+      env: None
+    }
+  }
+}
 
 
