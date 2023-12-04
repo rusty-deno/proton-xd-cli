@@ -29,3 +29,10 @@ pub(crate) enum Permissions {
   }
 }
 
+
+impl Permissions {
+  pub fn new()-> Self {
+    unimplemented!()
+  }
+}
+

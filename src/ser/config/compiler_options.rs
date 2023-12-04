@@ -40,3 +40,12 @@ pub(crate) struct CompilerOptions {
   no_terminal: bool,
   env: Option<PathBuf>,
 }
+
+impl CompilerOptions {
+  pub fn new()-> Self {
+    unimplemented!()
+  }
+}
+
+
+

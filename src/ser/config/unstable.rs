@@ -11,7 +11,13 @@ pub(crate) enum Unstable {
   #[serde(rename="*")]
   All,
   Bool(bool),
-  Others(Box<[UnstableOption]>)
+  Explicit(Box<[UnstableOption]>)
+}
+
+impl Unstable {
+  pub fn new()-> Self {
+    unimplemented!()
+  }
 }
 
 
@@ -30,3 +36,5 @@ pub(crate) enum UnstableOption {
   WorkerOptions,
   Cron
 }
+
+

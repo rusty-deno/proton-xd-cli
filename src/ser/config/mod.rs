@@ -38,6 +38,16 @@ pub(crate) struct Config {
 }
 
 impl Config {
+  pub fn new()-> Config {
+    Config {
+      compiler_options: CompilerOptions::new(),
+      name: "".into(),
+      version: "".into(),
+      permissions: Permissions::new(),
+      unstable: Unstable::new()
+    }
+  }
+
   pub async fn fetch_config()-> io::Result<(Config,PathBuf)> {
     loop {
       let res=fs::read_to_string("./proton-config.json").await;
