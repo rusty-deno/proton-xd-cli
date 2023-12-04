@@ -15,6 +15,7 @@ use serde::Deserialize;
 use std::path::PathBuf;
 
 
+pub const CONFIG_FILE_NAME: &str="proton-config.json";
 
 
 #[derive(Deserialize,Debug)]
@@ -50,7 +51,7 @@ impl Config {
 
   pub async fn fetch_config()-> io::Result<(Config,PathBuf)> {
     loop {
-      let res=fs::read_to_string("./proton-config.json").await;
+      let res=fs::read_to_string(CONFIG_FILE_NAME).await;
 
       if let Ok(res)=res {
         return Ok((serde_json::from_str(&res).unwrap(),env::current_dir()?));
@@ -58,7 +59,7 @@ impl Config {
       
       match res.unwrap_err().kind() {
         io::ErrorKind::NotFound=> env::set_current_dir("..")?,
-        _=> panic!("No `proton-xd-config.json` file found!")
+        _=> panic!("No `{CONFIG_FILE_NAME}` file found!")
       }
     }
   }

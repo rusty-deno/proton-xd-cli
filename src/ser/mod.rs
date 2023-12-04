@@ -1,8 +1,9 @@
 mod writer;
 mod operation;
 
+
+pub(crate) mod config;
 pub(in crate::ser) mod build;
-pub(in crate::ser) mod config;
 pub(in crate::ser) mod init;
 
 

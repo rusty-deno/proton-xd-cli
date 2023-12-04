@@ -1,6 +1,7 @@
 
 
 
-console.log(Deno.env.toObject());
+
+console.log(confirm("xd"));
 
 

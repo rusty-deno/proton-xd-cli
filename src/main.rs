@@ -22,18 +22,9 @@ async fn main() {
 
 #[cfg(test)]
 mod tests {
-  use crossterm::style::{
-    Color,
-    style,
-    Stylize
-  };
-
-
   #[test]
   fn xd() {
-    let msg=format!("{}: ./ is not an empty directory!",style("warning").with(Color::Yellow));
-
-    println!("{msg}")
+    
   }
 }
 
