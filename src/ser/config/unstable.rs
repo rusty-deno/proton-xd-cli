@@ -16,9 +16,16 @@ pub(crate) enum Unstable {
 
 impl Unstable {
   pub fn new()-> Self {
-    unimplemented!()
+    Self::default()
   }
 }
+
+impl Default for Unstable {
+  fn default()-> Self {
+    Self::Explicit([UnstableOption::Ffi].into())
+  }
+}
+
 
 
 #[derive(Serialize,Deserialize,Debug)]
