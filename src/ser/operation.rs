@@ -1,11 +1,12 @@
 
 use tokio::*;
 use clap::Parser;
-use std::path::PathBuf;
 
 
-use crate::api::*;
-use super::build::Build;
+use super::{
+  build::Build,
+  init::Init
+};
 
 
 
@@ -21,18 +22,10 @@ pub enum Operation {
     template: Option<Box<str>>,
     #[arg(long)]
     ts: bool,
-    #[arg(long)]
+    #[arg(long,default_value="false")]
     js: bool
   },
-  Init {
-    path: Option<PathBuf>,
-    #[arg(short,long)]
-    template: Option<Box<str>>,
-    #[arg(long)]
-    ts: bool,
-    #[arg(long)]
-    js: bool
-  }
+  Init(Init)
 }
 
 impl Operation {
@@ -42,8 +35,8 @@ impl Operation {
 
   pub async fn spawn(self)-> io::Result<()> {
     match self {
-      Operation::Build(build)=> build.build().await,
-      Operation::Init { path,template,ts,.. }=> clone_repo(path,template,ts).await,
+      Operation::Build(builder)=> builder.build().await,
+      Operation::Init(initializer)=> initializer.init().await,
       _=> todo!()
     }
   }

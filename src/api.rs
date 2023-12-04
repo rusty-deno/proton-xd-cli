@@ -5,12 +5,22 @@ use std::{
   path::PathBuf
 };
 
+use crossterm::style::{
+  Color,
+  style,
+  Stylize
+};
 
 
 pub async fn ensure_empty_dir(path: &PathBuf)-> io::Result<()> {
   match fs::read_dir(path).await?.next_entry().await? {
-    Some(path)=> panic!("{path:?} is not an empty directory!"),
     None=> Ok(()),
+    Some(path)=> {
+      let _msg=format!("{}: {path:?} is not an empty directory!",style("warning").with(Color::Yellow));
+      
+
+      todo!()
+    }
   }
 }
 
