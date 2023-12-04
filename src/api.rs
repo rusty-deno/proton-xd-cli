@@ -42,7 +42,7 @@ pub async fn ensure_dir(path: &PathBuf)-> io::Result<()> {
   if fs::try_exists(path).await? {
     return Ok(());
   }
-  fs::create_dir(path).await
+  fs::create_dir_all(path).await
 }
 
 
