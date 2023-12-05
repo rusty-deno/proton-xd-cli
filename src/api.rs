@@ -22,7 +22,7 @@ pub(crate) async fn confirm(msg: &str,default: bool) -> io::Result<bool> {
   let mut prompt=TextPrompt::new(msg);
   
   if let Ok(Some(str))=prompt.run().await {
-    return Ok(str.as_bytes()[0].eq_ignore_ascii_case(&b'y'));
+    return Ok(str.len()!=0 && str.as_bytes()[0].eq_ignore_ascii_case(&b'y'));
   }
 
   Ok(default)
