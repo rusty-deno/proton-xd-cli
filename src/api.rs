@@ -40,14 +40,15 @@ pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
     return Ok(());
   }
 
-  let msg=format!("{}: {:?} is not an empty directory. Do you want to override it?",style("warning").with(Color::Yellow),path);
+  let msg=format!("{}: {path:?} is not an empty directory. Do you want to override it?",style("warning").with(Color::Yellow));
   let prompt=confirm(&msg,false);
 
   match prompt {
-    false=> std::process::exit(0),
-    true=> {
-      fs::remove_file(file_path).await
-    },
+    true=> Ok(()),
+    false=> Err(io::Error::new(
+      io::ErrorKind::AlreadyExists,
+      format!("A proton-xd project already exists in {path:?}").as_str()
+    ))
   }
 }
 

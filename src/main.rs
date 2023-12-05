@@ -24,10 +24,10 @@ async fn main() {
 mod tests {
   #[tokio::test]
   async fn xd() {
-    let q=requestty::Question::input("Project name").default("my-app").build();
+    let q=requestty::Question::confirm("this aint an empty directory!").default(false).build();
 
 
-    println!("{:#?}",requestty::prompt_one(q).unwrap().as_string().unwrap());
+    println!("{:#?}",requestty::prompt_one(q).unwrap().as_bool().unwrap());
   }
 }
 
