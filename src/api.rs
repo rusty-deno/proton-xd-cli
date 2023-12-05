@@ -33,19 +33,20 @@ pub(crate) fn confirm(msg: &str,default: bool)-> bool {
 
 
 pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
-  let path=path.as_ref().to_owned();
-  if !fs::try_exists(path.join(CONFIG_FILE_NAME)).await? {
+  let path=path.as_ref();
+  let file_path=path.to_owned().join(CONFIG_FILE_NAME);
+
+  if !fs::try_exists(&file_path).await? {
     return Ok(());
   }
-  
-  let msg=format!("{}: {:?} is not an empty directory. Do you want to override it?",style("warning").with(Color::Yellow),&path);
+
+  let msg=format!("{}: {:?} is not an empty directory. Do you want to override it?",style("warning").with(Color::Yellow),path);
   let prompt=confirm(&msg,false);
 
   match prompt {
     false=> std::process::exit(0),
     true=> {
-      fs::remove_dir_all(&path).await.unwrap();
-      fs::create_dir_all(path).await
+      fs::remove_file(file_path).await
     },
   }
 }
