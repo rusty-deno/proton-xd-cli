@@ -22,13 +22,12 @@ async fn main() {
 
 #[cfg(test)]
 mod tests {
-  use crate::api::confirm;
-
+  use crate::api::ensure_fresh_dir;
 
 
   #[tokio::test]
   async fn xd() {
-    println!("{}",confirm("msg",false).await.unwrap())
+    ensure_fresh_dir("./test").await.unwrap()
   }
 }
 

@@ -4,7 +4,10 @@ use crate::ser::config::CONFIG_FILE_NAME;
 
 use std::{
   env,
-  path::PathBuf
+  path::{
+    Path,
+    PathBuf
+  }
 };
 
 use crossterm::style::{
@@ -29,25 +32,26 @@ pub(crate) async fn confirm(msg: &str,default: bool) -> io::Result<bool> {
 }
 
 
-pub async fn ensure_fresh_dir(path: &PathBuf)-> io::Result<()> {
+pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
+  let path=path.as_ref().to_owned();
   if !fs::try_exists(path.join(CONFIG_FILE_NAME)).await? {
     return Ok(());
   }
   
-  let msg=format!("{}: {path:?} is not an empty directory. Do you want to override it?",style("warning").with(Color::Yellow));
+  let msg=format!("{}: {:?} is not an empty directory. Do you want to override it?",style("warning").with(Color::Yellow),&path);
   let prompt=confirm(&msg,false).await?;
 
   match prompt {
     false=> std::process::exit(0),
     true=> {
-      fs::remove_dir_all(path).await.unwrap();
+      fs::remove_dir_all(&path).await.unwrap();
       fs::create_dir_all(path).await
     },
   }
 }
 
-pub async fn ensure_dir(path: &PathBuf)-> io::Result<()> {
-  if fs::try_exists(path).await? {
+pub async fn ensure_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
+  if fs::try_exists(&path).await? {
     return Ok(());
   }
   fs::create_dir_all(path).await
