@@ -22,12 +22,12 @@ async fn main() {
 
 #[cfg(test)]
 mod tests {
-  use crate::api::ensure_fresh_dir;
-
-
   #[tokio::test]
   async fn xd() {
-    ensure_fresh_dir("./test").await.unwrap()
+    let q=requestty::Question::input("Project name").default("my-app").build();
+
+
+    println!("{:#?}",requestty::prompt_one(q).unwrap().as_string().unwrap());
   }
 }
 
