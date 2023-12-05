@@ -19,7 +19,7 @@ pub struct Init {
 
 impl Init {
   pub async fn init(self)-> io::Result<()> {
-    unimplemented!()
+    todo!()
   }
 }
 

@@ -22,9 +22,13 @@ async fn main() {
 
 #[cfg(test)]
 mod tests {
-  #[test]
-  fn xd() {
-    
+  use crate::api::confirm;
+
+
+
+  #[tokio::test]
+  async fn xd() {
+    println!("{}",confirm("msg",false).await.unwrap())
   }
 }
 

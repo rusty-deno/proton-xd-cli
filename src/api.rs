@@ -15,26 +15,34 @@ use crossterm::style::{
 
 use prompts::{
   Prompt,
-  confirm::ConfirmPrompt
+  text::TextPrompt
 };
 
+pub(crate) async fn confirm(msg: &str,default: bool) -> io::Result<bool> {
+  let mut prompt=TextPrompt::new(msg);
+  
+  if let Ok(Some(str))=prompt.run().await {
+    return Ok(str.as_bytes()[0].eq_ignore_ascii_case(&b'y'));
+  }
+
+  Ok(default)
+}
 
 
 pub async fn ensure_fresh_dir(path: &PathBuf)-> io::Result<()> {
-  match fs::try_exists(path.join(CONFIG_FILE_NAME)).await? {
-    false=> Ok(()),
-    true=> {
-      let msg=format!("{}: {path:?} is not an empty directory!",style("warning").with(Color::Yellow));
-      let mut prompt=ConfirmPrompt::new(&msg).set_initial(false);
+  if !fs::try_exists(path.join(CONFIG_FILE_NAME)).await? {
+    return Ok(());
+  }
+  
+  let msg=format!("{}: {path:?} is not an empty directory. Do you want to override it?",style("warning").with(Color::Yellow));
+  let prompt=confirm(&msg,false).await?;
 
-      match prompt.run().await.unwrap().unwrap() {
-        false=> std::process::exit(0),
-        true=> {
-          fs::remove_dir_all(path).await.unwrap();
-          fs::create_dir_all(path).await
-        },
-      }
-    }
+  match prompt {
+    false=> std::process::exit(0),
+    true=> {
+      fs::remove_dir_all(path).await.unwrap();
+      fs::create_dir_all(path).await
+    },
   }
 }
 
