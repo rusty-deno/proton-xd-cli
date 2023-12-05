@@ -16,30 +16,30 @@ use crossterm::style::{
   Stylize
 };
 
-use prompts::{
-  Prompt,
-  text::TextPrompt
+use requestty::{
+  Question,
+  prompt_one
 };
 
-pub(crate) async fn confirm(msg: &str,default: bool) -> io::Result<bool> {
-  let mut prompt=TextPrompt::new(msg);
-  
-  if let Ok(Some(str))=prompt.run().await {
-    return Ok(str.len()!=0 && str.as_bytes()[0].eq_ignore_ascii_case(&b'y'));
-  }
 
-  Ok(default)
+pub(crate) fn confirm(msg: &str,default: bool)-> bool {
+  let q=Question::confirm(msg).default(default).build();
+  
+  match prompt_one(q) {
+    Ok(res)=> res.as_bool().unwrap(),
+    _=> default
+  }
 }
 
 
-pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
+pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   let path=path.as_ref().to_owned();
   if !fs::try_exists(path.join(CONFIG_FILE_NAME)).await? {
     return Ok(());
   }
   
   let msg=format!("{}: {:?} is not an empty directory. Do you want to override it?",style("warning").with(Color::Yellow),&path);
-  let prompt=confirm(&msg,false).await?;
+  let prompt=confirm(&msg,false);
 
   match prompt {
     false=> std::process::exit(0),

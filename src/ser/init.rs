@@ -13,7 +13,6 @@ use requestty::{
 
 #[derive(Parser,Debug)]
 pub struct Init {
-  path: Option<PathBuf>,
   #[arg(short,long)]
   template: Option<Box<str>>,
   #[arg(long)]
