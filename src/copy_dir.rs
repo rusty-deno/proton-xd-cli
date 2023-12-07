@@ -9,7 +9,13 @@ use std::{
 
 
 
-/// xd
+/// copies a directory to specified `dest` path recursively. (actually iteratively)
+/// 
+/// `exceptions` is actually a regex expression that decides whether a file/directory should be copied.
+/// # Example
+/// ```rs
+/// copy_dir_all("./test/repo","./test/xd",".git*").await?;
+/// ```
 #[allow(unused)]
 pub async fn copy_dir_all<P: AsRef<Path>>(from: P,to: P,exceptions: &str)-> io::Result<()> {
   let except=regex::Regex::new(exceptions).unwrap();

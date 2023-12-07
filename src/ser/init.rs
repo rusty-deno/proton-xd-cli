@@ -27,6 +27,7 @@ impl Init {
     let url=url(&ensure_template(self.template),ensure_lang(self.ts));
     clone_repo(&url,"./").await?;
 
+    //generates a config file with default config.
     let cwd=std::env::current_dir()?;
     Config::new(cwd.file_name().unwrap().to_str().unwrap()).save(CONFIG_FILE_NAME).await
   }

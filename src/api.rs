@@ -4,7 +4,10 @@ use io::Error;
 use crate::TEMPLATES;
 
 
-use std::path::Path;
+use std::{
+  env,
+  path::Path
+};
 
 use requestty::{
   Question,
@@ -72,7 +75,7 @@ pub(crate) fn ensure_template<'a>(template: Option<String>)-> String {
 
   let prompt=prompt_one(q).unwrap().try_into_list_item().unwrap();
   
-  TEMPLATES[prompt.index].0.to_owned().to_lowercase()
+  TEMPLATES[prompt.index].0.to_lowercase()
 }
 
 pub fn ensure_lang<'a>(ts: Option<bool>)-> &'a str {
@@ -105,10 +108,21 @@ pub(crate) fn url(template: &str,lang: &str)-> String {
 
 
 pub(crate) async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
-  match git2::Repository::clone_recurse(url,into) {
+  let temp=env::temp_dir();
+
+  match git2::Repository::clone_recurse(url,&temp) {
     Ok(_)=> {
-      fs::remove_dir("./git").await?;
-      fs::remove_file(".gitignore").await
+      //switching to temp dir
+      env::set_current_dir(&temp)?;
+      //cleaning up git-repo stuff as there may already be a repo in `into`
+      fs::remove_dir_all("./git").await?;
+      fs::remove_file(".gitignore").await?;
+
+      // copy contents of `temp` to `into`
+      //fs::copy(...).await?;
+
+      //switching back to into
+      env::set_current_dir(into)
     },
     Err(err)=> Err(Error::from_raw_os_error(err.raw_code())),
   }

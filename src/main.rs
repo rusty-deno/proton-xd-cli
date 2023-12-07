@@ -1,4 +1,5 @@
 mod ser;
+mod copy_dir;
 pub(crate) mod api;
 use ser::*;
 
@@ -16,31 +17,32 @@ async fn main() {
 
 #[cfg(test)]
 mod tests {
+  use tokio::test;
+  use crate::ser::TEMPLATES;
+
   use requestty::{
     Question,
     prompt_one
   };
-  
+
   use crossterm::style::{
     style,
     Color,
     Stylize
   };
 
-use crate::ser::TEMPLATES;
-
   fn rgb((name,r,g,b): (&str,u8,u8,u8))-> String {
     style(name).with(Color::Rgb { r,g,b }).to_string()
   }
 
-  #[tokio::test]
+  #[test]
   async fn xd() {
     let q=Question::select("Choose").choices(TEMPLATES.map(rgb)).build();
 
     println!("{:#?}",style(&prompt_one(q).unwrap().as_list_item().unwrap().text).content());
   }
 
-  #[tokio::test]
+  #[test]
   async fn path() {
     println!("{:?}",std::path::Path::new("./src/ser").file_name().unwrap());
   }
