@@ -45,7 +45,7 @@ pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
     true=> Ok(()),
     false=> Err(io::Error::new(
       io::ErrorKind::AlreadyExists,
-      format!("A proton-xd project already exists in {path:?}").as_str()
+      format!("{path:?} is not an empty directory").as_str()
     ))
   }
 }
@@ -58,16 +58,10 @@ pub async fn ensure_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
 }
 
 
-pub async fn clone_repo(path: Option<PathBuf>,_template: Option<Box<str>>,ts: bool)-> io::Result<()> {
-  let path=path.unwrap_or(env::current_dir()?);
-  ensure_fresh_dir(&path).await?;
-
-  let _url=format!("https://github.com/kakashi-69-xd/proton-xd-templates/{}/{}",lang(ts),"next");
-
-
-
-  Ok(())
+pub(crate) fn url(template: &str,ts: bool)-> Box<str> {
+  format!("https://github.com/proton-xd-templates/{template}-template-{}",lang(ts)).into_boxed_str()
 }
+
 
 pub fn lang<'a>(ts: bool)-> &'a str {
   match ts {
