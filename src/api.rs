@@ -1,7 +1,10 @@
 
 use tokio::*;
 use io::Error;
-use crate::TEMPLATES;
+use crate::{
+  TEMPLATES,
+  copy_dir::copy_dir_all
+};
 
 
 use std::{
@@ -111,19 +114,7 @@ pub(crate) async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<(
   let temp=env::temp_dir();
 
   match git2::Repository::clone_recurse(url,&temp) {
-    Ok(_)=> {
-      //switching to temp dir
-      env::set_current_dir(&temp)?;
-      //cleaning up git-repo stuff as there may already be a repo in `into`
-      fs::remove_dir_all("./git").await?;
-      fs::remove_file(".gitignore").await?;
-
-      // copy contents of `temp` to `into`
-      //fs::copy(...).await?;
-
-      //switching back to into
-      env::set_current_dir(into)
-    },
+    Ok(_)=> copy_dir_all(temp,&into,".git*").await,
     Err(err)=> Err(Error::from_raw_os_error(err.raw_code())),
   }
 }
