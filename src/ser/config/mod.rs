@@ -3,13 +3,12 @@ mod unstable;
 mod permission;
 mod compiler_options;
 
-
 use unstable::*;
 use permission::*;
 use compiler_options::*;
 
-
 use tokio::*;
+use super::Writer;
 use std::path::PathBuf;
 use crate::CONFIG_FILE_NAME;
 
@@ -69,7 +68,11 @@ impl Config {
   }
 
   pub async fn save<P: AsRef<Path>>(self,path: P)-> io::Result<()> {
-    fs::write(path,serde_json::to_vec_pretty(&self)?).await
+    let mut w=Writer::new();
+    let mut serializer=serde_json::Serializer::new(&mut w);
+    self.serialize(&mut serializer)?;
+
+    fs::write(path,w.to_vec()).await
   }
 }
 
