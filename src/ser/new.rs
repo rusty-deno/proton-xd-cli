@@ -3,15 +3,16 @@ use tokio::*;
 use clap::Parser;
 use crate::api::*;
 use std::path::PathBuf;
-use super::{config::Config, CONFIG_FILE_NAME};
-
 
 use requestty::{
   Question,
   prompt_one
 };
 
-
+use super::{
+  config::Config,
+  CONFIG_FILE_NAME
+};
 
 
 
@@ -33,12 +34,12 @@ impl New {
     let path=&self.ensure_path();
     ensure_dir(path).await?;
     ensure_fresh_dir(path).await?;
-    std::env::set_current_dir(path)?;
 
 
     let url=url(&ensure_template(self.template),ensure_lang(self.ts));
-    clone_repo(&url,"./").await?;// fix conflict bug
+    clone_repo(&url,path).await?;
 
+    //generates a config file with default config.
     Config::new(path.file_name().unwrap().to_str().unwrap()).save(CONFIG_FILE_NAME).await
   }
 

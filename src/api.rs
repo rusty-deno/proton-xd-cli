@@ -1,8 +1,10 @@
 
 use tokio::*;
 use io::Error;
-use std::path::Path;
 use crate::TEMPLATES;
+
+
+use std::path::Path;
 
 use requestty::{
   Question,
@@ -34,29 +36,29 @@ pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
     return Ok(());
   }
 
-  let msg=format!("{}: {path:?} is not an empty directory. Do you want to continue?",style("warning").with(Color::Yellow));
+  let msg=format!("{}: {} is not an empty directory. Do you want to continue?",style("warning").with(Color::Yellow),path.display());
   let prompt=confirm(&msg,false);
 
   match prompt {
     true=> Ok(()),
     false=> Err(io::Error::new(
       io::ErrorKind::AlreadyExists,
-      format!("{path:?} is not an empty directory").as_str()
+      format!("{} is not an empty directory",path.display()).as_str()
     ))
   }
 }
 
 pub(crate) async fn ensure_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
-  if fs::try_exists(&path).await? {
-    return Ok(());
+  match fs::try_exists(&path).await {
+    Err(_)=> fs::create_dir_all(path).await,
+    _=> Ok(()),
   }
-  fs::create_dir_all(path).await
 }
 
 
 /// colors as string.
 fn rgb((name,r,g,b): (&str,u8,u8,u8))-> String {
-  style(name).with((r,g,b).into()).to_string()
+  style(name).with(Color::Rgb { r,g,b }).to_string()
 }
 
 pub(crate) fn ensure_template<'a>(template: Option<String>)-> String {
@@ -77,7 +79,6 @@ pub fn ensure_lang<'a>(ts: Option<bool>)-> &'a str {
   if let Some(ts)=ts {
     return lang(ts);
   }
-  // 0x2d79c7
 
   let q=Question::select("Choose your language")
   .choices([
