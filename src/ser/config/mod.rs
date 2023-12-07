@@ -13,9 +13,9 @@ use tokio::*;
 use std::env;
 use serde::Deserialize;
 use std::path::PathBuf;
+use crate::CONFIG_FILE_NAME;
 
 
-pub const CONFIG_FILE_NAME: &str="proton-config.json";
 
 
 #[derive(Deserialize,Debug)]

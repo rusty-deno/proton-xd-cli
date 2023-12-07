@@ -22,19 +22,28 @@ async fn main() {
 
 #[cfg(test)]
 mod tests {
-  use tokio::*;
+  use requestty::{
+    Question,
+    prompt_one
+  };
+  
+  use crossterm::style::{
+    style,
+    Color,
+    Stylize
+  };
 
-use crate::api::ensure_fresh_dir;
+use crate::ser::TEMPLATES;
 
-  async fn _xd()-> io::Result<()> {
-    println!("{:?}",std::env::current_exe()?);
-
-    Ok(())
+  fn rgb((name,r,g,b): (&str,u8,u8,u8))-> String {
+    style(name).with(Color::Rgb { r,g,b }).to_string()
   }
 
   #[tokio::test]
   async fn xd() {
-    ensure_fresh_dir("./test").await.unwrap()
+    let q=Question::select("Choose").choices(TEMPLATES.map(rgb)).build();
+
+    println!("{:#?}",style(&prompt_one(q).unwrap().as_list_item().unwrap().text).content());
   }
 }
 

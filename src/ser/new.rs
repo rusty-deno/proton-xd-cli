@@ -18,7 +18,7 @@ use requestty::{
 pub struct New {
   path: Option<PathBuf>,
   #[arg(short,long)]
-  template: Option<Box<str>>,
+  template: Option<String>,
   #[arg(long)]
   ts: Option<bool>,
   #[arg(long)]
@@ -33,8 +33,9 @@ impl New {
     ensure_fresh_dir(path).await?;
     std::env::set_current_dir(path)?;
 
-    let url=url(&self.template.unwrap_or("next".into()),self.ts.unwrap_or_default());
-    clone_repo(&url,"./")?;
+
+    let url=url(&ensure_template(self.template),self.ts.unwrap_or_default());
+    clone_repo(&url,"./")?;// fix conflict bug
 
     //config file
 

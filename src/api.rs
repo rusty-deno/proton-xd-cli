@@ -1,9 +1,8 @@
 
 use tokio::*;
-use std::path::Path;
-
-
 use io::Error;
+use std::path::Path;
+use crate::TEMPLATES;
 
 use requestty::{
   Question,
@@ -53,6 +52,24 @@ pub async fn ensure_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   }
   fs::create_dir_all(path).await
 }
+
+pub fn ensure_template<'a>(template: Option<String>)-> String {
+  if let Some(template)=template {
+    return template;
+  }
+
+  let q=Question::select("Choose a Template")
+  .choices(TEMPLATES.map(|(name,r,g,b)| style(name).with((r,g,b).into()).to_string()))
+  .build();
+
+  let prompt=prompt_one(q).unwrap();
+  let item=prompt.as_list_item().unwrap();
+  
+  TEMPLATES[item.index].0.to_owned().to_lowercase()
+}
+
+
+
 
 
 pub(crate) fn url(template: &str,ts: bool)-> String {

@@ -1,12 +1,12 @@
 use serde::Deserialize;
 
+use crate::ser::FFI_DIR;
+
 use super::{
   Value::Vec,
   Val
 };
 
-
-pub(crate) const FFI_DIR: &str="https://github.com/kakashi-69-xd/proton-xd/bindings/bin";
 
 
 #[derive(Deserialize,Debug)]

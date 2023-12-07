@@ -8,7 +8,7 @@ use crate::api::*;
 #[derive(Parser,Debug)]
 pub struct Init {
   #[arg(short,long)]
-  template: Option<Box<str>>,
+  template: Option<String>,
   #[arg(long)]
   ts: Option<bool>,
   #[arg(long)]
@@ -19,7 +19,7 @@ impl Init {
   pub async fn init(self)-> io::Result<()> {
     ensure_fresh_dir("./").await?;
 
-    let url=url(&self.template.unwrap(),self.ts.unwrap_or(false));
+    let url=url(&ensure_template(self.template),self.ts.unwrap_or(false));
     clone_repo(&url,"./")
   }
 }
