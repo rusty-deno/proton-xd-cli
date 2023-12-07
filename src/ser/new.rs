@@ -3,12 +3,14 @@ use tokio::*;
 use clap::Parser;
 use crate::api::*;
 use std::path::PathBuf;
+use super::{config::Config, CONFIG_FILE_NAME};
 
 
 use requestty::{
   Question,
   prompt_one
 };
+
 
 
 
@@ -35,11 +37,9 @@ impl New {
 
 
     let url=url(&ensure_template(self.template),ensure_lang(self.ts));
-    clone_repo(&url,"./")?;// fix conflict bug
+    clone_repo(&url,"./").await?;// fix conflict bug
 
-    //config file
-
-    Ok(())
+    Config::new(path.file_name().unwrap().to_str().unwrap()).save(CONFIG_FILE_NAME).await
   }
 
   fn ensure_path(&self)-> PathBuf {
@@ -53,7 +53,6 @@ impl New {
     }
   }
 }
-
 
 
 

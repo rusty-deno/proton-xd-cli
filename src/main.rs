@@ -39,5 +39,10 @@ use crate::ser::TEMPLATES;
 
     println!("{:#?}",style(&prompt_one(q).unwrap().as_list_item().unwrap().text).content());
   }
+
+  #[tokio::test]
+  async fn path() {
+    println!("{:?}",std::path::Path::new("./src/ser").file_name().unwrap());
+  }
 }
 

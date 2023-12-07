@@ -1,7 +1,12 @@
 
 use tokio::*;
 use clap::Parser;
-use crate::api::*;
+use super::config::Config;
+
+use crate::{
+  api::*,
+  ser::CONFIG_FILE_NAME
+};
 
 
 
@@ -20,7 +25,10 @@ impl Init {
     ensure_fresh_dir("./").await?;
 
     let url=url(&ensure_template(self.template),ensure_lang(self.ts));
-    clone_repo(&url,"./")
+    clone_repo(&url,"./").await?;
+
+    let cwd=std::env::current_dir()?;
+    Config::new(cwd.file_name().unwrap().to_str().unwrap()).save(CONFIG_FILE_NAME).await
   }
 }
 

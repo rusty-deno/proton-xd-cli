@@ -103,11 +103,13 @@ pub(crate) fn url(template: &str,lang: &str)-> String {
 }
 
 
-pub(crate) fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
-  match git2::Repository::clone(url,into) {
-    Ok(_)=> Ok(()),
+pub(crate) async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
+  match git2::Repository::clone_recurse(url,into) {
+    Ok(_)=> {
+      fs::remove_dir("./git").await?;
+      fs::remove_file(".gitignore").await
+    },
     Err(err)=> Err(Error::from_raw_os_error(err.raw_code())),
   }
 }
-
 
