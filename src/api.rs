@@ -60,7 +60,7 @@ pub(crate) fn url(template: &str,ts: bool)-> String {
 }
 
 
-pub fn lang<'a>(ts: bool)-> &'a str {
+fn lang<'a>(ts: bool)-> &'a str {
   match ts {
     true=> "ts",
     false=> "js",

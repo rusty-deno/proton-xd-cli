@@ -1,6 +1,7 @@
 
 use tokio::*;
 use clap::Parser;
+use crate::api::*;
 use std::path::PathBuf;
 
 
@@ -9,7 +10,6 @@ use requestty::{
   prompt_one
 };
 
-use crate::api::*;
 
 
 
@@ -28,9 +28,11 @@ pub struct New {
 
 impl New {
   pub async fn init(self)-> io::Result<()> {
-    let path=self.ensure_path();
-    std::env::set_current_dir(&path)?;
-    
+    let path=&self.ensure_path();
+    ensure_dir(path).await?;
+    ensure_fresh_dir(path).await?;
+    std::env::set_current_dir(path)?;
+
     let url=url(&self.template.unwrap_or("next".into()),self.ts.unwrap_or_default());
     clone_repo(&url,"./")?;
 
