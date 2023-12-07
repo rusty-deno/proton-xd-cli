@@ -10,15 +10,22 @@ use compiler_options::*;
 
 
 use tokio::*;
-use std::env;
-use serde::Deserialize;
 use std::path::PathBuf;
 use crate::CONFIG_FILE_NAME;
 
+use std::{
+  env,
+  path::Path
+};
+
+use serde::{
+  Serialize,
+  Deserialize
+};
 
 
 
-#[derive(Deserialize,Debug)]
+#[derive(Deserialize,Serialize,Debug)]
 pub(crate) enum Value {
   #[serde(rename="*")]
   All,
@@ -28,7 +35,7 @@ pub(crate) enum Value {
 pub(crate) type Val=Option<Value>;
 
 
-#[derive(Deserialize,Debug)]
+#[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
 pub(crate) struct Config {
   name: Box<str>,
@@ -39,13 +46,10 @@ pub(crate) struct Config {
 }
 
 impl Config {
-  pub fn new()-> Config {
+  pub fn new(name: &str)-> Config {
     Config {
-      compiler_options: CompilerOptions::new(),
-      name: "".into(),
-      version: "".into(),
-      permissions: Permissions::new(),
-      unstable: Unstable::new()
+      name: name.into(),
+      ..Default::default()
     }
   }
 
@@ -63,10 +67,24 @@ impl Config {
       }
     }
   }
+
+  pub async fn save<P: AsRef<Path>>(self,path: P)-> io::Result<()> {
+    fs::write(path,serde_json::to_vec_pretty(&self)?).await
+  }
 }
 
 
-
+impl Default for Config {
+  fn default()-> Self {
+    Self {
+      name: "my-app".into(),
+      version: "1.0.0".into(),
+      compiler_options: Default::default(),
+      permissions: Default::default(),
+      unstable: Default::default()
+    }
+  }
+}
 
 
 

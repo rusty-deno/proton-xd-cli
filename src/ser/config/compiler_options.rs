@@ -1,6 +1,11 @@
 use super::Val;
-use serde::Deserialize;
 use std::path::PathBuf;
+
+
+use serde::{
+  Deserialize,
+  Serialize
+};
 
 
 fn _true()-> bool {
@@ -8,8 +13,7 @@ fn _true()-> bool {
 }
 
 
-
-#[derive(Deserialize,Debug)]
+#[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
 pub(crate) struct CompilerOptions {
   no_check: Val,

@@ -1,4 +1,3 @@
-use serde::Deserialize;
 
 use crate::ser::FFI_DIR;
 
@@ -7,9 +6,15 @@ use super::{
   Val
 };
 
+use serde::{
+  Deserialize,
+  Serialize
+};
 
 
-#[derive(Deserialize,Debug)]
+
+
+#[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
 pub(crate) enum Permissions {
   #[serde(rename="*")]

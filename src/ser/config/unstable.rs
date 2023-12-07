@@ -5,7 +5,7 @@ use serde::{
 };
 
 
-#[derive(Deserialize,Debug)]
+#[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
 pub(crate) enum Unstable {
   #[serde(rename="*")]
