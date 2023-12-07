@@ -17,7 +17,7 @@ use std::{
 /// copy_dir_all("./test/repo","./test/xd",".git*").await?;
 /// ```
 #[allow(unused)]
-pub async fn copy_dir_all<P: AsRef<Path>>(from: P,to: P,exceptions: &str)-> io::Result<()> {
+pub async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,exceptions: &str)-> io::Result<()> {
   let except=regex::Regex::new(exceptions).unwrap();
   let mut queue=LinkedList::from_iter([(from.as_ref().to_owned(),to.as_ref().to_owned())]);
 
