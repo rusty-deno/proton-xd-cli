@@ -1,6 +1,5 @@
 use tokio::*;
 use clap::Parser;
-use crate::api::*;
 use std::path::PathBuf;
 
 
@@ -12,7 +11,8 @@ pub struct Build {
 
 impl Build {
   pub async fn build(self)-> io::Result<()> {
-    ensure_dir(&self.dir).await?;
+    // ensures that `path` exists.
+    fs::create_dir_all(&self.dir).await?;
 
     let mut process=process::Command::new("deno");
     process.arg("compile")

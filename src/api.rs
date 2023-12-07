@@ -27,7 +27,7 @@ use crossterm::style::{
 
 pub(crate) fn confirm(msg: &str,default: bool)-> bool {
   let q=Question::confirm(msg).default(default).build();
-  
+
   match prompt_one(q) {
     Ok(res)=> res.as_bool().unwrap(),
     _=> default
@@ -38,29 +38,26 @@ pub(crate) fn confirm(msg: &str,default: bool)-> bool {
 pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   let path=path.as_ref();
 
+  // Checks whether there are any files at `path`.
   if fs::read_dir(path).await?.next_entry().await?.is_none() {
     return Ok(());
   }
 
-  let msg=format!("{}: {} is not an empty directory. Do you want to continue?",style("warning").with(Color::Yellow),path.display());
+  let msg=format!(
+    "{}: {} is not an empty directory. Do you want to continue?",
+    style("warning").with(Color::Yellow),
+    path.display()
+  );
   let prompt=confirm(&msg,false);
 
   match prompt {
-    true=> Ok(()),
     false=> Err(io::Error::new(
       io::ErrorKind::AlreadyExists,
       format!("{} is not an empty directory",path.display()).as_str()
-    ))
+    )),
+    _=> Ok(())
   }
 }
-
-pub(crate) async fn ensure_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
-  match fs::try_exists(&path).await {
-    Err(_)=> fs::create_dir_all(path).await,
-    _=> Ok(()),
-  }
-}
-
 
 /// colors as string.
 fn rgb((name,r,g,b): (&str,u8,u8,u8))-> String {
@@ -77,7 +74,7 @@ pub(crate) fn ensure_template<'a>(template: Option<String>)-> String {
   .build();
 
   let prompt=prompt_one(q).unwrap().try_into_list_item().unwrap();
-  
+  // fetching template from `TEMPLATES` using index as resetting as styled `String` is more expensive.
   TEMPLATES[prompt.index].0.to_lowercase()
 }
 
@@ -113,7 +110,7 @@ pub(crate) fn url(template: &str,lang: &str)-> String {
 pub(crate) async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
   let temp=env::temp_dir();
 
-  match git2::Repository::clone_recurse(url,&temp) {
+  match git2::Repository::clone(url,&temp) {
     Ok(_)=> copy_dir_all(temp,&into,".git*").await,
     Err(err)=> Err(Error::from_raw_os_error(err.raw_code())),
   }

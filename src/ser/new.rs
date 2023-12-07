@@ -32,7 +32,8 @@ pub struct New {
 impl New {
   pub async fn init(self)-> io::Result<()> {
     let path=&self.ensure_path();
-    ensure_dir(path).await?;
+    // ensures that `path` exists.
+    fs::create_dir_all(path).await?;
     ensure_fresh_dir(path).await?;
 
 
