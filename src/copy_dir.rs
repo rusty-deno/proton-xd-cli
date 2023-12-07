@@ -9,8 +9,10 @@ use std::{
 
 
 
+/// xd
 #[allow(unused)]
-pub async fn copy_dir_all<P: AsRef<Path>>(from: P,to: P)-> io::Result<()> {
+pub async fn copy_dir_all<P: AsRef<Path>>(from: P,to: P,exceptions: &str)-> io::Result<()> {
+  let except=regex::Regex::new(exceptions).unwrap();
   let mut queue=LinkedList::from_iter([(from.as_ref().to_owned(),to.as_ref().to_owned())]);
 
   while let Some((src,dest))=queue.pop_front() {
@@ -18,6 +20,10 @@ pub async fn copy_dir_all<P: AsRef<Path>>(from: P,to: P)-> io::Result<()> {
     let mut iter=fs::read_dir(src).await?;
 
     while let Some(entry)=iter.next_entry().await? {
+      if except.is_match(entry.path().to_str().unwrap_or_default()) {
+        continue;
+      }
+
       let entry_type=entry.file_type().await?;
       let entry_dest_path=dest.join(entry.file_name());
 
@@ -41,7 +47,7 @@ mod tests {
   use tokio::test;
   #[test]
   async fn xd() {
-    super::copy_dir_all("./test/repo","./test/xd").await.unwrap()
+    super::copy_dir_all("./test/repo","./test/xd",".git*").await.unwrap()
   }
 }
 
