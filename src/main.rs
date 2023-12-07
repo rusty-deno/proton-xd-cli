@@ -22,12 +22,19 @@ async fn main() {
 
 #[cfg(test)]
 mod tests {
+  use tokio::*;
+
+use crate::api::ensure_fresh_dir;
+
+  async fn _xd()-> io::Result<()> {
+    println!("{:?}",std::env::current_exe()?);
+
+    Ok(())
+  }
+
   #[tokio::test]
   async fn xd() {
-    let q=requestty::Question::confirm("this aint an empty directory!").default(false).build();
-
-
-    println!("{:#?}",requestty::prompt_one(q).unwrap().as_bool().unwrap());
+    ensure_fresh_dir("./test").await.unwrap()
   }
 }
 

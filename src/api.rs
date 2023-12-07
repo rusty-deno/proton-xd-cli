@@ -1,12 +1,13 @@
 
 use tokio::*;
+use std::path::Path;
 
-use std::{
-  env,
-  path::{
-    Path,
-    PathBuf
-  }
+
+use io::Error;
+
+use requestty::{
+  Question,
+  prompt_one
 };
 
 use crossterm::style::{
@@ -15,10 +16,6 @@ use crossterm::style::{
   Stylize
 };
 
-use requestty::{
-  Question,
-  prompt_one
-};
 
 
 pub(crate) fn confirm(msg: &str,default: bool)-> bool {
@@ -31,7 +28,7 @@ pub(crate) fn confirm(msg: &str,default: bool)-> bool {
 }
 
 
-pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
+pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   let path=path.as_ref();
 
   if fs::read_dir(path).await?.next_entry().await?.is_none() {
@@ -58,8 +55,8 @@ pub async fn ensure_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
 }
 
 
-pub(crate) fn url(template: &str,ts: bool)-> Box<str> {
-  format!("https://github.com/proton-xd-templates/{template}-template-{}",lang(ts)).into_boxed_str()
+pub(crate) fn url(template: &str,ts: bool)-> String {
+  format!("https://github.com/proton-xd-templates/{template}-template-{}",lang(ts))
 }
 
 
@@ -70,6 +67,11 @@ pub fn lang<'a>(ts: bool)-> &'a str {
   }
 }
 
-
+pub fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
+  match git2::Repository::clone(url,into) {
+    Ok(_)=> Ok(()),
+    Err(err)=> Err(Error::from_raw_os_error(err.raw_code())),
+  }
+}
 
 

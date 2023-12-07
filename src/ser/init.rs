@@ -3,11 +3,14 @@ use tokio::*;
 use clap::Parser;
 use std::path::PathBuf;
 
+
 use requestty::{
   Question,
   prompt_one,
   Result as Res
 };
+
+use crate::api::*;
 
 
 
@@ -23,10 +26,10 @@ pub struct Init {
 
 impl Init {
   pub async fn init(self)-> io::Result<()> {
-    
+    ensure_fresh_dir("./").await?;
 
-
-    Ok(())
+    let url=url(&self.template.unwrap(),self.ts.unwrap_or(false));
+    clone_repo(&url,"./")
   }
 }
 
