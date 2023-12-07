@@ -27,7 +27,7 @@ pub(crate) fn confirm(msg: &str,default: bool)-> bool {
 }
 
 
-pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
+pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   let path=path.as_ref();
 
   if fs::read_dir(path).await?.next_entry().await?.is_none() {
@@ -46,28 +46,56 @@ pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   }
 }
 
-pub async fn ensure_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
+pub(crate) async fn ensure_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   if fs::try_exists(&path).await? {
     return Ok(());
   }
   fs::create_dir_all(path).await
 }
 
-pub fn ensure_template<'a>(template: Option<String>)-> String {
+
+/// colors as string.
+fn rgb((name,r,g,b): (&str,u8,u8,u8))-> String {
+  style(name).with((r,g,b).into()).to_string()
+}
+
+pub(crate) fn ensure_template<'a>(template: Option<String>)-> String {
   if let Some(template)=template {
     return template;
   }
 
   let q=Question::select("Choose a Template")
-  .choices(TEMPLATES.map(|(name,r,g,b)| style(name).with((r,g,b).into()).to_string()))
+  .choices(TEMPLATES.map(rgb))
   .build();
 
-  let prompt=prompt_one(q).unwrap();
-  let item=prompt.as_list_item().unwrap();
+  let prompt=prompt_one(q).unwrap().try_into_list_item().unwrap();
   
-  TEMPLATES[item.index].0.to_owned().to_lowercase()
+  TEMPLATES[prompt.index].0.to_owned().to_lowercase()
 }
 
+pub fn ensure_lang<'a>(ts: Option<bool>)-> &'a str {
+  if let Some(ts)=ts {
+    return lang(ts);
+  }
+  // 0x2d79c7
+
+  let q=Question::select("Choose your language")
+  .choices([
+    rgb(("TypeScript",0x2d,0x79,0xc7)),
+    rgb(("JavaScript",0xff,0xff,0x0))
+  ])
+  .build();
+  let prompt=prompt_one(q).unwrap().try_into_list_item().unwrap();
+
+  lang(prompt.index!=0)
+}
+
+fn lang<'a>(ts: bool)-> &'a str {
+  match ts {
+    true=> "ts",
+    false=> "js",
+  }
+}
 
 
 
@@ -77,14 +105,7 @@ pub(crate) fn url(template: &str,ts: bool)-> String {
 }
 
 
-fn lang<'a>(ts: bool)-> &'a str {
-  match ts {
-    true=> "ts",
-    false=> "js",
-  }
-}
-
-pub fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
+pub(crate) fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
   match git2::Repository::clone(url,into) {
     Ok(_)=> Ok(()),
     Err(err)=> Err(Error::from_raw_os_error(err.raw_code())),
