@@ -34,7 +34,7 @@ impl New {
     std::env::set_current_dir(path)?;
 
 
-    let url=url(&ensure_template(self.template),self.ts.unwrap_or_default());
+    let url=url(&ensure_template(self.template),ensure_lang(self.ts));
     clone_repo(&url,"./")?;// fix conflict bug
 
     //config file

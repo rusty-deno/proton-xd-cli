@@ -98,10 +98,8 @@ fn lang<'a>(ts: bool)-> &'a str {
 }
 
 
-
-
-pub(crate) fn url(template: &str,ts: bool)-> String {
-  format!("https://github.com/proton-xd-templates/{template}-template-{}",lang(ts))
+pub(crate) fn url(template: &str,lang: &str)-> String {
+  format!("https://github.com/proton-xd-templates/{template}-template-{lang}")
 }
 
 

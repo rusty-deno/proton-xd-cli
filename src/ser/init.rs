@@ -19,7 +19,7 @@ impl Init {
   pub async fn init(self)-> io::Result<()> {
     ensure_fresh_dir("./").await?;
 
-    let url=url(&ensure_template(self.template),self.ts.unwrap_or(false));
+    let url=url(&ensure_template(self.template),ensure_lang(self.ts));
     clone_repo(&url,"./")
   }
 }
