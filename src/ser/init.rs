@@ -1,15 +1,6 @@
 
 use tokio::*;
 use clap::Parser;
-use std::path::PathBuf;
-
-
-use requestty::{
-  Question,
-  prompt_one,
-  Result as Res
-};
-
 use crate::api::*;
 
 
@@ -33,17 +24,6 @@ impl Init {
   }
 }
 
-
-fn _ensure_path(path: Option<PathBuf>)-> Res<PathBuf> {
-  match path {
-    Some(path)=> Ok(path),
-    None=> {
-      let question=Question::input("Project name").default("my-app").build();
-      
-      Ok(prompt_one(question)?.as_string().unwrap().into())
-    }
-  }
-}
 
 
 

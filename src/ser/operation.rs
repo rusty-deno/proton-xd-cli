@@ -5,7 +5,8 @@ use clap::Parser;
 
 use super::{
   build::Build,
-  init::Init
+  init::Init,
+  new::New
 };
 
 
@@ -16,15 +17,7 @@ use super::{
 #[command(author,version,about,long_about=None)]
 pub enum Operation {
   Build(Build),
-  New {
-    path: Box<str>,
-    #[arg(short,long)]
-    template: Option<Box<str>>,
-    #[arg(long)]
-    ts: bool,
-    #[arg(long,default_value="false")]
-    js: bool
-  },
+  New(New),
   Init(Init)
 }
 
@@ -37,7 +30,7 @@ impl Operation {
     match self {
       Operation::Build(builder)=> builder.build().await,
       Operation::Init(initializer)=> initializer.init().await,
-      _=> todo!()
+      Operation::New(initilizer)=> initilizer.init().await
     }
   }
 }
