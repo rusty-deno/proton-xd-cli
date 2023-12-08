@@ -36,11 +36,11 @@ pub(crate) type Val=Option<Value>;
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
 pub(crate) struct Config {
-  name: Box<str>,
-  version: Box<str>,
-  compiler_options: CompilerOptions,
-  permissions: Permissions,
-  unstable: Unstable
+  pub(crate) name: Box<str>,
+  pub(crate) version: Box<str>,
+  pub(crate) compiler_options: CompilerOptions,
+  pub(crate) permissions: Permissions,
+  pub(crate) unstable: Unstable
 }
 
 impl Config {
