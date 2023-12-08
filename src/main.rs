@@ -46,5 +46,21 @@ mod tests {
   async fn path() {
     println!("{:?}",std::path::Path::new("./src/ser").file_name().unwrap());
   }
+
+
+  #[test]
+  async fn repo() {
+    let _repo=git2::Repository::open("./test/gitrepo").unwrap();
+
+    println!("xd")
+  }
+
+
+  #[test]
+  async fn dir_entry_order() {
+    for entry in std::fs::read_dir(".").unwrap() {
+      println!("{:?}",entry.unwrap().file_name())
+    }
+  }
 }
 

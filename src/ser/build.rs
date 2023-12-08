@@ -1,6 +1,7 @@
 use tokio::*;
 use clap::Parser;
 use std::path::PathBuf;
+use super::config::Config;
 
 
 #[derive(Debug,Parser)]
@@ -11,15 +12,13 @@ pub struct Build {
 
 impl Build {
   pub async fn build(self)-> io::Result<()> {
-    // ensures that `path` exists.
-    fs::create_dir_all(&self.dir).await?;
+    // fetches config file and its path.
+    let _config=Config::find_config_file().await?;
 
-    let mut process=process::Command::new("deno");
-    process.arg("compile")
-    .args(["--no-prompt","-o",self.dir.join("xd").to_str().unwrap(),])
-    .arg("./proton-xd-src/main.ts");
 
-    std::process::exit(process.spawn()?.wait().await?.code().unwrap_or_default())
+
+
+    Ok(())
   }
 }
 
