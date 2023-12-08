@@ -9,7 +9,6 @@ use compiler_options::*;
 
 use tokio::*;
 use super::Writer;
-use std::path::PathBuf;
 use crate::CONFIG_FILE_NAME;
 
 use std::{
@@ -52,18 +51,19 @@ impl Config {
     }
   }
 
-  pub async fn fetch_config()-> io::Result<(Config,PathBuf)> {
+  /// finds the config file and switches to that directory
+  pub async fn find_config_file()-> io::Result<Config> {
     loop {
       let res=fs::read_to_string(CONFIG_FILE_NAME).await;
 
       if let Ok(res)=res {
-        return Ok((serde_json::from_str(&res).unwrap(),env::current_dir()?));
+        return Ok(serde_json::from_str(&res).unwrap());
       }
       
       match res.unwrap_err().kind() {
-        io::ErrorKind::NotFound=> env::set_current_dir("..")?,
-        _=> panic!("No `{CONFIG_FILE_NAME}` file found!")
-      }
+        io::ErrorKind::NotFound=> env::set_current_dir(".."),
+        kind=> Err(io::Error::new(kind,format!("No `{CONFIG_FILE_NAME}` file found!")))
+      }?
     }
   }
 
