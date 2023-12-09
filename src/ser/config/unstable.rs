@@ -5,7 +5,7 @@ use serde::{
 };
 
 use super::ToArgs;
-use std::collections::linked_list::IntoIter;
+use std::collections::LinkedList;
 
 
 #[derive(Deserialize,Serialize,Debug)]
@@ -30,7 +30,7 @@ impl Default for Unstable {
 }
 
 impl ToArgs for Unstable {
-  fn to_flags<'a>(self)-> IntoIter<&'a str> {
+  fn to_flags<'a>(self)-> LinkedList<&'a str> {
     unimplemented!()
   }
 }
@@ -54,7 +54,7 @@ pub(crate) enum UnstableOption {
 
 
 impl ToArgs for UnstableOption {
-  fn to_flags<'a>(self)-> IntoIter<&'a str> {
+  fn to_flags<'a>(self)-> LinkedList<&'a str> {
     unimplemented!()
   }
 }

@@ -89,7 +89,7 @@ impl Default for CompilerOptions {
 
 
 impl ToArgs for CompilerOptions {
-  fn to_flags<'a>(self)-> std::collections::linked_list::IntoIter<&'a str> {
+  fn to_flags<'a>(self)-> std::collections::LinkedList<&'a str> {
     unimplemented!()
   }
 }

@@ -11,7 +11,7 @@ pub(crate) use config::*;
 
 
 
-use std::collections::linked_list::IntoIter;
+use std::collections::LinkedList;
 use super::Writer;
 
 use serde::{
@@ -32,7 +32,7 @@ pub(crate) type Val=Option<Value>;
 
 
 pub(crate) trait ToArgs {
-  fn to_flags<'a>(self)-> IntoIter<&'a str>;
+  fn to_flags<'a>(self)-> LinkedList<&'a str>;
 }
 
 

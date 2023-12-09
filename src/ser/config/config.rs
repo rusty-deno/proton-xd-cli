@@ -5,7 +5,8 @@ use crate::CONFIG_FILE_NAME;
 
 use std::{
   env,
-  path::Path
+  path::Path,
+  collections::LinkedList
 };
 
 use serde::{
@@ -74,8 +75,12 @@ impl Default for Config {
 
 
 impl ToArgs for Config {
-  fn to_flags<'a>(self)-> IntoIter<&'a str> {
-    unimplemented!()
+  fn to_flags<'a>(self)-> LinkedList<&'a str> {
+    let _compiler_options=self.compiler_options.to_flags();
+
+
+
+    todo!()
   }
 }
 
