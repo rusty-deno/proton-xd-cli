@@ -76,11 +76,11 @@ impl Default for Config {
 
 impl ToArgs for Config {
   fn to_flags<'a>(self)-> LinkedList<&'a str> {
-    let _compiler_options=self.compiler_options.to_flags();
-
-
-
-    todo!()
+    let mut flags=self.compiler_options.to_flags();
+    flags.append(&mut self.permissions.to_flags());
+    flags.append(&mut self.unstable.to_flags());
+    
+    flags
   }
 }
 
