@@ -78,17 +78,40 @@ impl ToArgs for Permissions {
 
     match self {
       Permissions::All=> LinkedList::from_iter(["-A".into()]),
-      Permissions::Permissions {..}=> {
-        let mut _flags=LinkedList::new();
-
-
-
-
-
-
-
-
-        _flags
+      Permissions::Permissions {
+        allow_read,
+        allow_write,
+        allow_net,
+        unsafely_ignore_certificate_errors,
+        allow_env,
+        allow_sys,
+        allow_ffi,
+        allow_hrtm,
+        deny_read,
+        deny_write,
+        deny_net,
+        deny_env,
+        deny_sys,
+        deny_ffi,
+        deny_hrtm
+      }=> {
+        LinkedList::from_iter([
+          parse(allow_read,"--allow-read"),
+          parse(allow_write,"--allow-write"),
+          parse(allow_net,"--allow-net"),
+          parse(allow_env,"--allow-env"),
+          parse(allow_sys,"--allow-sys"),
+          parse(allow_ffi,"--allow-ffi"),
+          parse(allow_hrtm,"--allow-hrtm"),
+          parse(unsafely_ignore_certificate_errors,"--unsafely-ignore-certificate-errors"),
+          parse(deny_read,"--deny-read"),
+          parse(deny_write,"--deny-write"),
+          parse(deny_net,"--deny-net"),
+          parse(deny_env,"--deny-env"),
+          parse(deny_sys,"--deny-sys"),
+          parse(deny_ffi,"--deny-ffi"),
+          parse(deny_hrtm,"--deny-hrtm"),
+        ])
       }
     }
   }
@@ -101,9 +124,10 @@ fn parse<'a>(val: Val,perm: &str)-> Box<str> {
     None=> "".into(),
     Some(v)=> {
       match v {
-        All|Bool(true)=> format!("--allow-{perm}").into_boxed_str(),
-        Bool(_)=> todo!(),
-        Vec(_)=> todo!(),
+        // allow_read: ["/home","/dev"] turns into --allow-read="/home,/dev"
+        Vec(list)=> format!("{perm}=\"{}\"",list.join(",")).into_boxed_str(),
+        All|Bool(true)=> format!("{perm}").into_boxed_str(),
+        _=> "".into(),
       }
     },
   }
