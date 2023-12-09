@@ -89,7 +89,7 @@ impl Default for CompilerOptions {
 
 
 impl ToArgs for CompilerOptions {
-  fn to_flags<'a>(self)-> std::collections::LinkedList<&'a str> {
+  fn to_flags(self)-> std::collections::LinkedList<Box<str>> {
     unimplemented!()
   }
 }

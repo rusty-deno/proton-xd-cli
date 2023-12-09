@@ -30,13 +30,13 @@ impl Default for Unstable {
 }
 
 impl ToArgs for Unstable {
-  fn to_flags<'a>(self)-> LinkedList<&'a str> {
+  fn to_flags(self)-> LinkedList<Box<str>> {
     use Unstable::*;
     match self {
       Bool(false)=> LinkedList::new(),
-      All|Bool(true)=> LinkedList::from_iter(["--unstable"]),
+      All|Bool(true)=> LinkedList::from_iter(["--unstable".into()]),
       Explicit(options)=> {
-        let mut list=LinkedList::<&'a str>::new();
+        let mut list=LinkedList::new();
 
         for option in options.iter() {
           list.push_back(option.to_flag());
@@ -66,7 +66,7 @@ pub(crate) enum UnstableOption {
 }
 
 impl UnstableOption {
-  fn to_flag<'a>(&self)-> &'a str {
+  fn to_flag(&self)-> Box<str> {
     use UnstableOption::*;
     match self {
       BareNodeBuiltins=> "--unstable-bare-node-builtins",
@@ -80,7 +80,7 @@ impl UnstableOption {
       Http=> "--unstable-http",
       WorkerOptions=> "--unstable-worker-options",
       Cron=> "--unstable-cron",
-    }
+    }.into()
   }
 }
 

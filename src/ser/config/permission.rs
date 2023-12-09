@@ -1,7 +1,8 @@
 use crate::ser::FFI_DIR;
+use std::collections::LinkedList;
 
 use super::{
-  Value::Vec,
+  Value::*,
   Val,
   ToArgs
 };
@@ -73,8 +74,37 @@ impl Default for Permissions {
 
 
 impl ToArgs for Permissions {
-  fn to_flags<'a>(self)-> std::collections::LinkedList<&'a str> {
-    unimplemented!()
+  fn to_flags(self)-> LinkedList<Box<str>> {
+
+    match self {
+      Permissions::All=> LinkedList::from_iter(["-A".into()]),
+      Permissions::Permissions {..}=> {
+        let mut _flags=LinkedList::new();
+
+
+
+
+
+
+
+
+        _flags
+      }
+    }
   }
 }
 
+
+
+fn parse<'a>(val: Val,perm: &str)-> Box<str> {
+  match val {
+    None=> "".into(),
+    Some(v)=> {
+      match v {
+        All|Bool(true)=> format!("--allow-{perm}").into_boxed_str(),
+        Bool(_)=> todo!(),
+        Vec(_)=> todo!(),
+      }
+    },
+  }
+}

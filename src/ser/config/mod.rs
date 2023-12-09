@@ -32,7 +32,7 @@ pub(crate) type Val=Option<Value>;
 
 
 pub(crate) trait ToArgs {
-  fn to_flags<'a>(self)-> LinkedList<&'a str>;
+  fn to_flags(self)-> LinkedList<Box<str>>;
 }
 
 
