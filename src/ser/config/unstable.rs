@@ -4,6 +4,9 @@ use serde::{
   Serialize
 };
 
+use super::ToArgs;
+use std::collections::linked_list::IntoIter;
+
 
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
@@ -26,6 +29,11 @@ impl Default for Unstable {
   }
 }
 
+impl ToArgs for Unstable {
+  fn to_flags<'a>(self)-> IntoIter<&'a str> {
+    unimplemented!()
+  }
+}
 
 
 #[derive(Serialize,Deserialize,Debug)]
@@ -44,4 +52,10 @@ pub(crate) enum UnstableOption {
   Cron
 }
 
+
+impl ToArgs for UnstableOption {
+  fn to_flags<'a>(self)-> IntoIter<&'a str> {
+    unimplemented!()
+  }
+}
 

@@ -1,17 +1,20 @@
-use super::Val;
 use std::path::PathBuf;
-
 
 use serde::{
   Deserialize,
   Serialize
 };
 
+use super::{
+  Val,
+  ToArgs
+};
+
+
 
 fn _true()-> bool {
   true
 }
-
 
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
@@ -84,4 +87,10 @@ impl Default for CompilerOptions {
   }
 }
 
+
+impl ToArgs for CompilerOptions {
+  fn to_flags<'a>(self)-> std::collections::linked_list::IntoIter<&'a str> {
+    unimplemented!()
+  }
+}
 

@@ -1,9 +1,9 @@
-
 use crate::ser::FFI_DIR;
 
 use super::{
   Value::Vec,
-  Val
+  Val,
+  ToArgs
 };
 
 use serde::{
@@ -68,6 +68,13 @@ impl Default for Permissions {
       deny_ffi: None,
       deny_hrtm: None,
     }
+  }
+}
+
+
+impl ToArgs for Permissions {
+  fn to_flags<'a>(self)-> std::collections::linked_list::IntoIter<&'a str> {
+    unimplemented!()
   }
 }
 
