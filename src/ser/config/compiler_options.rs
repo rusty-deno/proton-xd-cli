@@ -19,7 +19,7 @@ fn _true()-> bool {
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
 pub(crate) struct CompilerOptions {
-  pub(crate) no_check: Val,
+  pub(crate) no_check: Option<bool>,
   pub(crate) import_map: Option<PathBuf>,
   pub(crate) no_remote: Option<bool>,
   pub(crate) no_npm: Option<bool>,
