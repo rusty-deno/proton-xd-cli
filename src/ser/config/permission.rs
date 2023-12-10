@@ -1,11 +1,8 @@
+
+use super::*;
 use crate::ser::FFI_DIR;
 use std::collections::LinkedList;
 
-use super::{
-  Value::*,
-  Val,
-  ToArgs
-};
 
 use serde::{
   Deserialize,
@@ -58,7 +55,7 @@ impl Default for Permissions {
       unsafely_ignore_certificate_errors: None,
       allow_env: None,
       allow_sys: None,
-      allow_ffi: Some(Vec([FFI_DIR.into()].into())),// path of dylib
+      allow_ffi: Some(Value::Vec([FFI_DIR.into()].into())),// path of dylib
       allow_hrtm: None,
       //deny
       deny_read: None,
@@ -96,21 +93,21 @@ impl ToArgs for Permissions {
         deny_hrtm
       }=> {
         LinkedList::from_iter([
-          parse(allow_read,"--allow-read"),
-          parse(allow_write,"--allow-write"),
-          parse(allow_net,"--allow-net"),
-          parse(allow_env,"--allow-env"),
-          parse(allow_sys,"--allow-sys"),
-          parse(allow_ffi,"--allow-ffi"),
-          parse(allow_hrtm,"--allow-hrtm"),
-          parse(unsafely_ignore_certificate_errors,"--unsafely-ignore-certificate-errors"),
-          parse(deny_read,"--deny-read"),
-          parse(deny_write,"--deny-write"),
-          parse(deny_net,"--deny-net"),
-          parse(deny_env,"--deny-env"),
-          parse(deny_sys,"--deny-sys"),
-          parse(deny_ffi,"--deny-ffi"),
-          parse(deny_hrtm,"--deny-hrtm"),
+          allow_read.parse("--allow-read"),
+          allow_write.parse("--allow-write"),
+          allow_net.parse("--allow-net"),
+          allow_env.parse("--allow-env"),
+          allow_sys.parse("--allow-sys"),
+          allow_ffi.parse("--allow-ffi"),
+          allow_hrtm.parse("--allow-hrtm"),
+          unsafely_ignore_certificate_errors.parse("--unsafely-ignore-certificate-errors"),
+          deny_read.parse("--deny-read"),
+          deny_write.parse("--deny-write"),
+          deny_net.parse("--deny-net"),
+          deny_env.parse("--deny-env"),
+          deny_sys.parse("--deny-sys"),
+          deny_ffi.parse("--deny-ffi"),
+          deny_hrtm.parse("--deny-hrtm"),
         ])
       }
     }
@@ -119,16 +116,4 @@ impl ToArgs for Permissions {
 
 
 
-fn parse<'a>(val: Val,perm: &str)-> Box<str> {
-  match val {
-    None=> "".into(),
-    Some(v)=> {
-      match v {
-        // allow_read: ["/home","/dev"] turns into --allow-read="/home,/dev"
-        Vec(list)=> format!("{perm}=\"{}\"",list.join(",")).into_boxed_str(),
-        All|Bool(true)=> format!("{perm}").into_boxed_str(),
-        _=> "".into(),
-      }
-    },
-  }
-}
+
