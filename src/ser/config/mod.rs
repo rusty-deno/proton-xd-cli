@@ -13,14 +13,14 @@ use std::path::Path;
 
 
 pub(in crate::ser::config) trait Parse {
-  fn parse(&self,option: &str)-> Box<str>;
+  fn parse(&self,option: &str)-> Option<Box<str>>;
 }
 
 impl<S: Parse> Parse for Option<S> {
-  fn parse(&self,option: &str)-> Box<str> {
+  fn parse(&self,option: &str)-> Option<Box<str>> {
     match self {
       Some(val)=> val.parse(option),
-      _=> "".into()
+      _=> None
     }
   }
 }
@@ -29,37 +29,37 @@ impl<S: Parse> Parse for Option<S> {
 
 
 impl Parse for bool {
-  fn parse(&self,option: &str)-> Box<str> {
+  fn parse(&self,option: &str)-> Option<Box<str>> {
     match self {
-      true=> option,
-      _=> ""
-    }.into()
+      true=> Some(option.into()),
+      _=> None
+    }
   }
 }
 
 impl Parse for u128 {
-  fn parse(&self,option: &str)-> Box<str> {
-    format!("{option} {self}").into_boxed_str()
+  fn parse(&self,option: &str)-> Option<Box<str>> {
+    Some(format!("{option} {self}").into_boxed_str())
   }
 }
 
 
 
 impl Parse for Box<Path> {
-  fn parse(&self,option: &str)-> Box<str> {
-    format!("{option}={}",self.display()).into_boxed_str()
+  fn parse(&self,option: &str)-> Option<Box<str>> {
+    Some(format!("{option}={}",self.display()).into_boxed_str())
   }
 }
 
 impl Parse for Box<[Box<str>]> {
-  fn parse(&self,option: &str)-> Box<str> {
-    format!("{option}=\"{}\"",self.join(",")).into_boxed_str()
+  fn parse(&self,option: &str)-> Option<Box<str>> {
+    Some(format!("{option}=\"{}\"",self.join(",")).into_boxed_str())
   }
 }
 
 impl Parse for Box<str> {
-  fn parse(&self,option: &str)-> Box<str> {
-    format!("{option} {}",&self).into_boxed_str()
+  fn parse(&self,option: &str)-> Option<Box<str>> {
+    Some(format!("{option} {}",&self).into_boxed_str())
   }
 }
 

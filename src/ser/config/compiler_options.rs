@@ -86,7 +86,7 @@ impl Default for CompilerOptions {
 
 
 impl ToArgs for CompilerOptions {
-  fn to_flags(&self)-> LinkedList<Box<str>> {
+  fn to_flags(&self)-> LinkedList<Option<Box<str>>> {
     LinkedList::from_iter([
       self.no_check.parse("--no-check"),
       self.import_map.parse("--import-map"),
