@@ -3,10 +3,7 @@ use tokio::*;
 use super::*;
 
 
-use crate::{
-  CONFIG_FILE_NAME,
-  ser::FFI_DIR
-};
+use crate::CONFIG_FILE_NAME;
 
 use std::{
   env,
@@ -28,12 +25,11 @@ pub(crate) type Array<T>=Box<[T]>;
 
 
 pub(crate) type Unstable=HashMap<Str,bool>;
-pub(crate) type Permissions=HashMap<Str,Array<Str>>;
 
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
 pub(crate) struct Config {
-  pub(crate) name: Box<str>,
+  pub(crate) name: Str,
   pub(crate) compiler_options: CompilerOptions,
   pub(crate) permissions: Permissions,
   pub(crate) unstable: Unstable
@@ -78,10 +74,7 @@ impl Default for Config {
     Self {
       name: "my-app".into(),
       compiler_options: Default::default(),
-      permissions: HashMap::from_iter([
-        //  key                 val
-        ( "allow-ffi".into(), [FFI_DIR.into()].into() )
-      ]),
+      permissions: Permissions::default(),
       unstable: HashMap::from_iter([
         //  key                 val
         ( "ffi".into(), true )
@@ -92,7 +85,7 @@ impl Default for Config {
 
 
 impl ToArgs for Config {
-  fn to_flags(&self)-> LinkedList<Option<Box<str>>> {
+  fn to_flags(&self)-> LinkedList<Option<Str>> {
     let mut flags=self.compiler_options.to_flags();
     flags.append(&mut self.permissions.to_flags());
     flags.append(&mut self.unstable.to_flags());

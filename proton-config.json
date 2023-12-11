@@ -1,6 +1,5 @@
 {
   "name": "my-app",
-  "version": "1.0.0",
   "compiler-options": {
     "no-check": null,
     "import-map": null,
@@ -29,9 +28,23 @@
     "env": null
   },
   "permissions": {
-    "allow-ffi": [
+    "allow_read": null,
+    "allow_write": null,
+    "allow_net": null,
+    "unsafely_ignore_certificate_errors": null,
+    "allow_env": null,
+    "allow_sys": null,
+    "allow_ffi": [
       "https://github.com/kakashi-69-xd/proton-xd/bindings/bin"
-    ]
+    ],
+    "allow_hrtm": null,
+    "deny_read": null,
+    "deny_write": null,
+    "deny_net": null,
+    "deny_env": null,
+    "deny_sys": null,
+    "deny_ffi": null,
+    "deny_hrtm": null
   },
   "unstable": {
     "ffi": true
