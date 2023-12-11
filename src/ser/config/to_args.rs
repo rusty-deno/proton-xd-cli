@@ -1,9 +1,14 @@
-use std::collections::{LinkedList, HashMap};
+
+use std::collections::{
+  LinkedList,
+  HashMap
+};
 
 use super::{
   Str,
   Parse,
-  Array, Unstable
+  Array,
+  Unstable
 };
 
 
