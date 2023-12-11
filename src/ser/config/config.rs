@@ -34,7 +34,6 @@ pub(crate) type Permissions=HashMap<Str,Array<Str>>;
 #[serde(rename_all="kebab-case")]
 pub(crate) struct Config {
   pub(crate) name: Box<str>,
-  pub(crate) version: Box<str>,
   pub(crate) compiler_options: CompilerOptions,
   pub(crate) permissions: Permissions,
   pub(crate) unstable: Unstable
@@ -78,7 +77,6 @@ impl Default for Config {
   fn default()-> Self {
     Self {
       name: "my-app".into(),
-      version: "1.0.0".into(),
       compiler_options: Default::default(),
       permissions: HashMap::from_iter([
         //  key                 val
