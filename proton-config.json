@@ -29,32 +29,9 @@
     "env": null
   },
   "permissions": {
-    "permissions": {
-      "": "Inner",
-      "allow-read": null,
-      "allow-write": null,
-      "allow-net": null,
-      "unsafely-ignore-certificate-errors": null,
-      "allow-env": null,
-      "allow-sys": null,
-      "allow-ffi": {
-        "Vec": [
-          "https://github.com/kakashi-69-xd/proton-xd/bindings/bin"
-        ]
-      },
-      "allow-hrtm": null,
-      "deny-read": null,
-      "deny-write": null,
-      "deny-net": null,
-      "deny-env": null,
-      "deny-sys": null,
-      "deny-ffi": null,
-      "deny-hrtm": null
-    }
-  },
-  "unstable": {
-    "explicit": [
-      "ffi"
+    "allow-ffi": [
+      "https://github.com/kakashi-69-xd/proton-xd/bindings/bin"
     ]
-  }
+  },
+  "unstable": []
 }

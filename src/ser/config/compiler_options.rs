@@ -45,12 +45,6 @@ pub(crate) struct CompilerOptions {
   pub(crate) env: Option<Box<Path>>,
 }
 
-impl CompilerOptions {
-  pub fn new()-> Self {
-    Default::default()
-  }
-}
-
 impl Default for CompilerOptions {
   fn default()-> Self {
     Self {

@@ -14,7 +14,7 @@ pub(crate) enum Unstable {
   #[serde(rename="*")]
   All,
   Bool(bool),
-  Explicit(Box<[UnstableOption]>)
+  Explicit(Vec<UnstableOption>)
 }
 
 impl Unstable {

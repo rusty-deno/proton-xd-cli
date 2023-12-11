@@ -1,12 +1,20 @@
 
 use tokio::*;
 use super::*;
-use crate::CONFIG_FILE_NAME;
+
+
+use crate::{
+  CONFIG_FILE_NAME,
+  ser::FFI_DIR
+};
 
 use std::{
   env,
   path::Path,
-  collections::LinkedList
+  collections::{
+    LinkedList,
+    HashMap
+  }
 };
 
 use serde::{
@@ -15,6 +23,9 @@ use serde::{
 };
 
 
+pub(crate) type Str=Box<str>;
+pub(crate) type Array<T>=Box<[T]>;
+pub(crate) type Unstable=Array<Str>;
 
 
 #[derive(Deserialize,Serialize,Debug)]
@@ -23,7 +34,7 @@ pub(crate) struct Config {
   pub(crate) name: Box<str>,
   pub(crate) version: Box<str>,
   pub(crate) compiler_options: CompilerOptions,
-  pub(crate) permissions: Permissions,
+  pub(crate) permissions: HashMap<Str,Array<Str>>,
   pub(crate) unstable: Unstable
 }
 
@@ -66,9 +77,12 @@ impl Default for Config {
     Self {
       name: "my-app".into(),
       version: "1.0.0".into(),
+      unstable: Default::default(),
+      permissions: HashMap::from_iter([
+        //  key                 val
+        ( "allow-ffi".into(), [FFI_DIR.into()].into() )
+      ]),
       compiler_options: Default::default(),
-      permissions: Default::default(),
-      unstable: Default::default()
     }
   }
 }
