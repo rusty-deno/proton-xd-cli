@@ -1,11 +1,17 @@
-use std::{path::Path, collections::LinkedList};
+use std::{
+  path::Path,
+  collections::LinkedList
+};
 
 use serde::{
   Deserialize,
   Serialize
 };
 
-use super::{ToArgs, Parse};
+use super::{
+  ToArgs,
+  Parse
+};
 
 
 
@@ -80,7 +86,7 @@ impl Default for CompilerOptions {
 
 
 impl ToArgs for CompilerOptions {
-  fn to_flags(self)-> LinkedList<Box<str>> {
+  fn to_flags(&self)-> LinkedList<Box<str>> {
     LinkedList::from_iter([
       self.no_check.parse("--no-check"),
       self.import_map.parse("--import-map"),

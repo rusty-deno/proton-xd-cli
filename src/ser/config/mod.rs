@@ -8,46 +8,13 @@ pub(crate) use to_args::*;
 
 
 use super::Writer;
-
-use serde::{
-  Serialize,
-  Deserialize
-};
-
 use std::path::Path;
 
-
-#[derive(Deserialize,Serialize,Debug)]
-pub(crate) enum Value {
-  #[serde(rename="*")]
-  All,
-  Bool(bool),
-  Vec(Vec<String>)
-}
-pub(crate) type Val=Option<Value>;
 
 
 pub(in crate::ser::config) trait Parse {
   fn parse(&self,option: &str)-> Box<str>;
 }
-
-impl Parse for Val {
-  fn parse(&self,option: &str)-> Box<str> {
-    use Value::*;
-    match self {
-      None=> "".into(),
-      Some(v)=> {
-        match v {
-          // allow_read: ["/home","/dev"] turns into --allow-read="/home,/dev"
-          Vec(list)=> format!("{option}=\"{}\"",list.join(",")).into_boxed_str(),
-          All|Bool(true)=> format!("{option}").into_boxed_str(),
-          _=> "".into(),
-        }
-      },
-    }
-  }
-}
-
 
 impl<S: Parse> Parse for Option<S> {
   fn parse(&self,option: &str)-> Box<str> {
@@ -57,7 +24,6 @@ impl<S: Parse> Parse for Option<S> {
     }
   }
 }
-
 
 
 

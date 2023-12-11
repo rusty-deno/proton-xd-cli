@@ -33,5 +33,7 @@
       "https://github.com/kakashi-69-xd/proton-xd/bindings/bin"
     ]
   },
-  "unstable": []
+  "unstable": {
+    "ffi": true
+  }
 }
