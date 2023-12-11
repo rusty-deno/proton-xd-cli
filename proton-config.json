@@ -1,7 +1,60 @@
 {
-  "permissions": "*",
-  "unstable": "*",
+  "name": "my-app",
+  "version": "1.0.0",
   "compiler-options": {
-    
+    "no-check": null,
+    "import-map": null,
+    "no-remote": null,
+    "no-npm": null,
+    "node-modules-dir": null,
+    "vendor": null,
+    "config": null,
+    "reload": null,
+    "lock": null,
+    "lock-write": null,
+    "no-lock": null,
+    "cert": null,
+    "quiet": null,
+    "unsafely-ignore-certificate-errors": null,
+    "no-prompt": true,
+    "catch-only": true,
+    "location": null,
+    "v8-flags": null,
+    "seed": null,
+    "check": null,
+    "include": null,
+    "output": null,
+    "target": null,
+    "no-terminal": true,
+    "env": null
+  },
+  "permissions": {
+    "permissions": {
+      "": "Inner",
+      "allow-read": null,
+      "allow-write": null,
+      "allow-net": null,
+      "unsafely-ignore-certificate-errors": null,
+      "allow-env": null,
+      "allow-sys": null,
+      "allow-ffi": {
+        "Vec": [
+          "https://github.com/kakashi-69-xd/proton-xd/bindings/bin"
+        ]
+      },
+      "allow-hrtm": null,
+      "deny-read": null,
+      "deny-write": null,
+      "deny-net": null,
+      "deny-env": null,
+      "deny-sys": null,
+      "deny-ffi": null,
+      "deny-hrtm": null
+    }
+  },
+  "unstable": {
+    "explicit": [
+      "ffi"
+    ]
   }
 }
