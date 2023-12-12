@@ -1,17 +1,13 @@
 
 use tokio::*;
 use super::*;
-
-
 use crate::CONFIG_FILE_NAME;
+
 
 use std::{
   env,
   path::Path,
-  collections::{
-    LinkedList,
-    HashMap
-  }
+  collections::LinkedList
 };
 
 use serde::{
@@ -20,11 +16,7 @@ use serde::{
 };
 
 
-pub(crate) type Str=Box<str>;
-pub(crate) type Array<T>=Box<[T]>;
 
-
-pub(crate) type Unstable=HashMap<Str,bool>;
 
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
@@ -75,10 +67,7 @@ impl Default for Config {
       name: "my-app".into(),
       compiler_options: Default::default(),
       permissions: Permissions::default(),
-      unstable: HashMap::from_iter([
-        //  key                 val
-        ( "ffi".into(), true )
-      ]),
+      unstable: Unstable::default()
     }
   }
 }

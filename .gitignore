@@ -8,6 +8,5 @@ options.txt
 proton-xd-cli.exe
 main.ts
 lib.ts
-unstable.rs
 
 

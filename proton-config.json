@@ -47,6 +47,16 @@
     "deny_hrtm": null
   },
   "unstable": {
-    "ffi": true
+    "bare-node-builtins": null,
+    "byonm": null,
+    "workspces": null,
+    "broadcast": null,
+    "ffi": true,
+    "fs": null,
+    "kv": null,
+    "net": null,
+    "http": null,
+    "worker-options": null,
+    "cron": null
   }
 }

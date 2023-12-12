@@ -1,11 +1,14 @@
-mod compiler_options;
+
 mod config;
 mod to_args;
+mod unstable;
 mod permission;
+mod compiler_options;
 
-
-use compiler_options::*;
+use unstable::*;
 use permission::*;
+use compiler_options::*;
+
 pub(crate) use config::*;
 pub(crate) use to_args::*;
 
@@ -16,6 +19,8 @@ use std::path::Path;
 
 
 
+pub(crate) type Str=Box<str>;
+pub(crate) type Array<T>=Box<[T]>;
 
 
 pub(in crate::ser::config) trait Parse {

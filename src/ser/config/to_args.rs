@@ -7,8 +7,7 @@ use std::collections::{
 use super::{
   Str,
   Parse,
-  Array,
-  Unstable
+  Array
 };
 
 
@@ -37,14 +36,3 @@ impl ToArgs for HashMap<Str,Array<Str>> {
     self.iter().map(|(k,v)| v.parse(&format!("--{k}"))).collect()
   }
 }
-
-
-impl ToArgs for Unstable {
-  fn to_flags(&self)-> LinkedList<Option<Box<str>>> {
-    self.iter().map(|(feature,val)|
-      //example format!("--unstable-{ffi}")
-      val.parse(&format!("--unstable-{feature}"))
-    ).collect()
-  }
-}
-
