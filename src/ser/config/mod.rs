@@ -87,6 +87,6 @@ mod tests {
 
   #[tokio::test]
   async fn read() {
-    println!("{:#?}",crate::config::Config::find_config_file().await.unwrap().parse_args())
+    println!("{:#?}",crate::config::Config::find_config_file().await.unwrap().parse_args::<Vec<Box<str>>>())
   }
 }
