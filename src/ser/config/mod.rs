@@ -78,6 +78,10 @@ impl Parse for Box<str> {
 #[cfg(test)]
 mod tests {
   use crate::ser::config::ToArgs;
+  use std::{
+    ffi::OsStr,
+    collections::LinkedList
+  };
 
 
   #[tokio::test]
@@ -87,6 +91,6 @@ mod tests {
 
   #[tokio::test]
   async fn read() {
-    println!("{:#?}",crate::config::Config::find_config_file().await.unwrap().parse_args::<Vec<Box<str>>>())
+    println!("{:#?}",crate::config::Config::find_config_file().await.unwrap().parse_args::<LinkedList<Box<OsStr>>>())
   }
 }
