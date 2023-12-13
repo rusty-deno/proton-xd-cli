@@ -64,10 +64,8 @@ impl Config {
   /// finds the config file and switches to that directory
   pub(crate) async fn find_config_file()-> io::Result<Config> {
     let not_found: &str=&format!("No `{CONFIG_FILE_NAME}` file found!");
-    loop {
-      if env::current_dir()?.parent().is_none() {
-        return Err(Error::new(NotFound,not_found));
-      }
+
+    while let Some(_)=env::current_dir()?.parent() {
       let res=fs::read_to_string(CONFIG_FILE_NAME).await;
 
       if let Ok(res)=res {
@@ -79,6 +77,8 @@ impl Config {
         kind=> Err(Error::new(kind,not_found))
       }?
     }
+
+    Err(Error::new(NotFound,not_found))
   }
 
   pub(crate) async fn save<P: AsRef<Path>>(self,path: P)-> io::Result<()> {
