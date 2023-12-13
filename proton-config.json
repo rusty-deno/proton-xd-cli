@@ -1,5 +1,7 @@
 {
   "name": "my-app",
+  "main": "proton-src/main",
+  "language": "typescript",
   "compiler-options": {
     "no-check": null,
     "import-map": null,

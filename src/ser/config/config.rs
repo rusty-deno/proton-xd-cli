@@ -30,6 +30,7 @@ pub(crate) struct Config {
 
 
 #[derive(Deserialize,Serialize,Debug,Default)]
+#[serde(rename_all="lowercase")]
 pub(crate) enum Language {
   #[default]
   TypeScript,Ts,
