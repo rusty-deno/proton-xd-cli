@@ -3,6 +3,7 @@ use tokio::*;
 use clap::Parser;
 use super::config::Config;
 
+
 use crate::{
   api::*,
   ser::CONFIG_FILE_NAME
@@ -13,7 +14,7 @@ use crate::{
 #[derive(Parser,Debug)]
 pub struct Init {
   #[arg(short,long)]
-  template: Option<String>,
+  template: Option<Box<str>>,
   #[arg(long)]
   ts: Option<bool>,
   #[arg(long)]

@@ -21,7 +21,7 @@ use super::{
 pub struct New {
   path: Option<PathBuf>,
   #[arg(short,long)]
-  template: Option<String>,
+  template: Option<Box<str>>,
   #[arg(long)]
   ts: Option<bool>,
   #[arg(long)]

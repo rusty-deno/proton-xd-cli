@@ -25,5 +25,8 @@ async fn _parent_of_root()-> io::Result<()> {
 }
 
 
-
+#[test]
+async fn size() {
+  std::rc::Rc::new(69u8);
+}
 

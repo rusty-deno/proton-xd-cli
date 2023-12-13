@@ -3,7 +3,8 @@ use tokio::*;
 use io::Error;
 use crate::{
   TEMPLATES,
-  copy_dir::copy_dir_all
+  copy_dir::copy_dir_all,
+  ser::config::Str
 };
 
 
@@ -60,11 +61,11 @@ pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
 }
 
 /// colors as string.
-fn rgb((name,r,g,b): (&str,u8,u8,u8))-> String {
-  style(name).with(Color::Rgb { r,g,b }).to_string()
+fn rgb((name,r,g,b): (&str,u8,u8,u8))-> Str {
+  style(name).with(Color::Rgb { r,g,b }).to_string().into_boxed_str()
 }
 
-pub(crate) fn ensure_template<'a>(template: Option<String>)-> String {
+pub(crate) fn ensure_template(template: Option<Str>)-> Str {
   if let Some(template)=template {
     return template;
   }
@@ -74,8 +75,8 @@ pub(crate) fn ensure_template<'a>(template: Option<String>)-> String {
   .build();
 
   let prompt=prompt_one(q).unwrap().try_into_list_item().unwrap();
-  // fetching template from `TEMPLATES` using index as resetting as styled `String` is more expensive.
-  TEMPLATES[prompt.index].0.to_lowercase()
+  // resetting as styled `String` is way too expensive.
+  TEMPLATES[prompt.index].0.to_lowercase().into_boxed_str()
 }
 
 pub fn ensure_lang<'a>(js: Option<bool>)-> &'a str {
@@ -102,8 +103,8 @@ fn lang<'a>(js: bool)-> &'a str {
 }
 
 
-pub(crate) fn url(template: &str,lang: &str)-> String {
-  format!("https://github.com/proton-xd-templates/{template}-template-{lang}")
+pub(crate) fn url(template: &str,lang: &str)-> Str {
+  format!("https://github.com/proton-xd-templates/{template}-template-{lang}").into_boxed_str()
 }
 
 
