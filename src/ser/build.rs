@@ -7,9 +7,13 @@ use std::{
   ffi::OsStr
 };
 
-use super::config::{
-  Config,
-  ToArgs
+use super::{
+  config::{
+    Config,
+    ToArgs,
+    Str
+  },
+  MAIN
 };
 
 
@@ -21,20 +25,21 @@ pub struct Build {
 
 impl Build {
   pub async fn build(self)-> io::Result<()> {
-    // fetches config file and sets `current_dir` to its directory.
-    let _config=Config::find_config_file().await?;
-  
-    process::Command::new("program").args(_config.parse_args::<std::collections::LinkedList<Box<OsStr>>>());
+    let config=Config::find_config_file().await?;
+    let args=config.to_flags().into_iter().filter_map(to_boxed_os_str);
 
+    let mut cmd=process::Command::new("deno");
+    cmd.arg("compile");
+    cmd.args(args);
+    cmd.arg(format!("{}.{}",config.main.unwrap_or(MAIN.into()),config.language.unwrap_or_default().extension()));
 
+    cmd.spawn()?.wait().await?;
 
     Ok(())
   }
 }
 
-
-
-
-
-
+fn to_boxed_os_str(str: Option<Str>)-> Option<Box<OsStr>> {
+  Some(OsStr::new(str?.as_ref()).into())
+}
 
