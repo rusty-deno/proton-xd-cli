@@ -2,6 +2,7 @@
 
 pub(crate) const CONFIG_FILE_NAME: &str="proton-config.json";
 pub(crate) const FFI_DIR: &str="https://github.com/kakashi-69-xd/proton-xd/bindings/bin";
+pub(crate) const MAIN: &str="proton-src/main";
 
 
 /// template names with their theme color in rgb format

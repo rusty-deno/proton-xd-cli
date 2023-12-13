@@ -120,7 +120,7 @@ impl ToArgs for Permissions {
 impl Parse for Permission {
   fn parse(&self,option: &str)-> Option<Box<str>> {
     match self {
-      //                                   # Example format!("{--allow-read}=\"{/home,/dev}\""); --allow-read="/home,/dev"
+      //                                   # Example --allow-read="/home,/dev"
       Permission::Permissions(perms)=> Some(format!("{option}=\"{}\"",perms.join(",")).into_boxed_str()),
       Permission::Bool(true)=> Some(option.into()),
       _=> None
