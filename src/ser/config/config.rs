@@ -1,8 +1,7 @@
 
 use tokio::*;
 use super::*;
-use crate::CONFIG_FILE_NAME;
-
+use super::super::consts::*;
 
 use std::{
   env,
@@ -22,13 +21,35 @@ use serde::{
 #[serde(rename_all="kebab-case")]
 pub(crate) struct Config {
   pub(crate) name: Str,
+  pub(crate) main: Option<Str>,
+  pub(crate) language: Option<Language>,
   pub(crate) compiler_options: CompilerOptions,
   pub(crate) permissions: Permissions,
   pub(crate) unstable: Unstable
 }
 
+
+#[derive(Deserialize,Serialize,Debug,Default)]
+pub(crate) enum Language {
+  #[default]
+  TypeScript,Ts,
+  JavaScript,Js
+}
+
+impl Language {
+  pub(crate) fn extension<'a>(self)-> &'a str {
+    use Language::*;
+    match self {
+      TypeScript|Ts=> "ts",
+      JavaScript|Js=> "js",
+    }
+  }
+}
+
+
+
 impl Config {
-  pub fn new(name: &str)-> Config {
+  pub(crate) fn new(name: &str)-> Config {
     Config {
       name: name.into(),
       ..Default::default()
@@ -36,7 +57,7 @@ impl Config {
   }
 
   /// finds the config file and switches to that directory
-  pub async fn find_config_file()-> io::Result<Config> {
+  pub(crate) async fn find_config_file()-> io::Result<Config> {
     loop {
       let res=fs::read_to_string(CONFIG_FILE_NAME).await;
 
@@ -51,7 +72,7 @@ impl Config {
     }
   }
 
-  pub async fn save<P: AsRef<Path>>(self,path: P)-> io::Result<()> {
+  pub(crate) async fn save<P: AsRef<Path>>(self,path: P)-> io::Result<()> {
     let mut w=Writer::new();
     let mut serializer=serde_json::Serializer::pretty(&mut w);
     self.serialize(&mut serializer)?;
@@ -65,6 +86,8 @@ impl Default for Config {
   fn default()-> Self {
     Self {
       name: "my-app".into(),
+      main: Some(MAIN.into()),
+      language: Some(Default::default()),
       compiler_options: Default::default(),
       permissions: Permissions::default(),
       unstable: Unstable::default()
