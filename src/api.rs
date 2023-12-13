@@ -78,9 +78,9 @@ pub(crate) fn ensure_template<'a>(template: Option<String>)-> String {
   TEMPLATES[prompt.index].0.to_lowercase()
 }
 
-pub fn ensure_lang<'a>(ts: Option<bool>)-> &'a str {
-  if let Some(ts)=ts {
-    return lang(ts);
+pub fn ensure_lang<'a>(js: Option<bool>)-> &'a str {
+  if let Some(js)=js {
+    return lang(js);
   }
 
   let q=Question::select("Choose your language")
@@ -94,10 +94,10 @@ pub fn ensure_lang<'a>(ts: Option<bool>)-> &'a str {
   lang(prompt.index!=0)
 }
 
-fn lang<'a>(ts: bool)-> &'a str {
-  match ts {
-    true=> "ts",
-    false=> "js",
+fn lang<'a>(js: bool)-> &'a str {
+  match js {
+    true=> "js",
+    _=> "ts"
   }
 }
 

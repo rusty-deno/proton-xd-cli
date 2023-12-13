@@ -24,7 +24,7 @@ impl Init {
   pub async fn init(self)-> io::Result<()> {
     ensure_fresh_dir("./").await?;
 
-    let url=url(&ensure_template(self.template),ensure_lang(self.ts));
+    let url=url(&ensure_template(self.template),ensure_lang(self.js));
     clone_repo(&url,"./").await?;
 
     //generates a config file with default config.

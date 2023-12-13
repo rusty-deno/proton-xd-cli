@@ -37,7 +37,7 @@ impl New {
     ensure_fresh_dir(path).await?;
 
 
-    let url=url(&ensure_template(self.template),ensure_lang(self.ts));
+    let url=url(&ensure_template(self.template),ensure_lang(self.js));
     clone_repo(&url,path).await?;
 
     //generates a config file with default config.
