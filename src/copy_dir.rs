@@ -20,7 +20,7 @@ use std::{
 /// ```
 pub async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,exceptions: &str)-> io::Result<()> {
   let except=regex::Regex::new(exceptions).unwrap();
-  let mut queue=LinkedList::from_iter([(from.as_ref().to_owned(),to.as_ref().to_owned())]);
+  let mut queue=LinkedList::<(Box<Path>,Box<Path>)>::from_iter([(from.as_ref().into(),to.as_ref().into())]);
 
   while let Some((src,dest))=queue.pop_front() {
     fs::create_dir_all(&dest).await?;
@@ -32,13 +32,13 @@ pub async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,exception
       }
 
       let entry_type=entry.file_type().await?;
-      let entry_dest_path=dest.join(entry.file_name());
+      let entry_dest_path=dest.join(entry.file_name()).into_boxed_path();
 
       match entry_type.is_file() {
         true=> {
           tokio::spawn(fs::copy(entry.path(),entry_dest_path)).await??;
         },
-        _=> queue.push_back((entry.path(),entry_dest_path))
+        _=> queue.push_back((entry.path().into_boxed_path(),entry_dest_path))
       }
     }
   }
