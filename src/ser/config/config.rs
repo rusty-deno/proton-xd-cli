@@ -6,7 +6,11 @@ use super::super::consts::*;
 use std::{
   env,
   path::Path,
-  collections::LinkedList
+  collections::LinkedList,
+  io::{
+    Error,
+    ErrorKind::NotFound
+  }
 };
 
 use serde::{
@@ -59,16 +63,20 @@ impl Config {
 
   /// finds the config file and switches to that directory
   pub(crate) async fn find_config_file()-> io::Result<Config> {
+    let not_found: &str=&format!("No `{CONFIG_FILE_NAME}` file found!");
     loop {
+      if env::current_dir()?.parent().is_none() {
+        return Err(Error::new(NotFound,not_found));
+      }
       let res=fs::read_to_string(CONFIG_FILE_NAME).await;
 
       if let Ok(res)=res {
-        return Ok(serde_json::from_str(&res).unwrap());
+        return Ok(serde_json::from_str(&res)?);
       }
       
       match res.unwrap_err().kind() {
-        io::ErrorKind::NotFound=> env::set_current_dir(".."),
-        kind=> Err(io::Error::new(kind,format!("No `{CONFIG_FILE_NAME}` file found!")))
+        NotFound=> env::set_current_dir(".."),
+        kind=> Err(Error::new(kind,not_found))
       }?
     }
   }

@@ -84,7 +84,7 @@ mod tests {
 
 
   #[tokio::test]
-  async fn xd() {
+  async fn write() {
     crate::config::Config::default().save("./proton-config.json").await.unwrap()
   }
 
