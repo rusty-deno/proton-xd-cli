@@ -14,7 +14,7 @@ use std::{
 
 use requestty::{
   Question,
-  prompt_one
+  prompt_one,
 };
 
 use crossterm::style::{

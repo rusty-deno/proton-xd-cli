@@ -31,6 +31,7 @@ impl Build {
     let mut cmd=process::Command::new("deno");
     cmd.arg("compile");
     cmd.args(args);
+    // # Example "./proton-src/main.ts"
     cmd.arg(format!("{}.{}",config.main.unwrap_or(MAIN.into()),config.language.unwrap_or_default().extension()));
 
     cmd.spawn()?.wait().await?;

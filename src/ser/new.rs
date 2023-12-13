@@ -32,7 +32,6 @@ pub struct New {
 impl New {
   pub async fn init(self)-> io::Result<()> {
     let path=&self.ensure_path();
-    // ensures that `path` exists.
     fs::create_dir_all(path).await?;
     ensure_fresh_dir(path).await?;
 
@@ -40,7 +39,7 @@ impl New {
     let url=url(&ensure_template(self.template),ensure_lang(self.js));
     clone_repo(&url,path).await?;
 
-    //generates a config file with default config.
+
     Config::new(path.file_name().unwrap().to_str().unwrap()).save(CONFIG_FILE_NAME).await
   }
 

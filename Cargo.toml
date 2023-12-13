@@ -3,17 +3,21 @@ name = "proton-xd-cli"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.release]
+strip = true
+opt-level = "s"
+lto = true
+codegen-units = 1
+
 
 [dependencies]
-log = "0.4.20"
 clap = "4.4.10"
-ctrlc = "3.4.1"
-clap-verbosity-flag = "2.1.0"
-tokio = { version = "1.34.0", features = ["full"] }
-serde = { version = "1.0.193", features = ["derive"] }
-serde_json = "1.0.108"
-crossterm = { version = "0.27.0", features = ["event-stream","filedescriptor","serde","use-dev-tty"] }
-requestty = { version = "0.5.0", features = ["macro","macros"] }
-git2 = { version = "0.18.1", features = ["unstable","vendored-libgit2","vendored-openssl","zlib-ng-compat"] }
+git2 = "0.18.1"
 regex = "1.10.2"
+requestty = "0.5.0"
+crossterm = "0.27.0"
+serde_json = "1.0.108"
+clap-verbosity-flag = "2.1.0"
+tokio = { version = "1.35.0", features = ["fs","rt","process","macros","rt-multi-thread"] }
+serde = { version = "1.0.193", features = ["derive"] }
+
