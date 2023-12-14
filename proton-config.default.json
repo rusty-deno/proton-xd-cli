@@ -18,7 +18,7 @@
     "quiet": null,
     "unsafely-ignore-certificate-errors": null,
     "no-prompt": true,
-    "catch-only": true,
+    "catch-only": null,
     "location": null,
     "v8-flags": null,
     "seed": null,

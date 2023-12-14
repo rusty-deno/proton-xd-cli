@@ -56,9 +56,9 @@ impl Default for CompilerOptions {
     Self {
       no_prompt: true,
       no_terminal: true,
-      catch_only: Some(true),
       // none
       no_check: None,
+      catch_only: None,
       import_map: None,
       no_remote: None,
       no_npm: None,
