@@ -1,16 +1,14 @@
+mod fs_api;
 
 use tokio::*;
+use fs_api::*;
 use io::Error;
+use std::path::Path;
+
+
 use crate::{
   TEMPLATES,
-  copy_dir::copy_dir_all,
   ser::config::Str
-};
-
-
-use std::{
-  env,
-  path::Path
 };
 
 use requestty::{
@@ -75,7 +73,7 @@ pub(crate) fn ensure_template(template: Option<Str>)-> Str {
   .build();
 
   let prompt=prompt_one(q).unwrap().try_into_list_item().unwrap();
-  // resetting as styled `String` is way too expensive.
+  // resetting a styled `String` is way too expensive.
   TEMPLATES[prompt.index].0.to_lowercase().into_boxed_str()
 }
 
@@ -109,10 +107,10 @@ pub(crate) fn url(template: &str,lang: &str)-> Str {
 
 
 pub(crate) async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
-  let temp=env::temp_dir();
+  let temp_dir=TempDir::new().await?;
 
-  match git2::Repository::clone(url,&temp) {
-    Ok(_)=> copy_dir_all(temp,&into,".git*").await,
+  match git2::Repository::clone(url,&temp_dir.path()) {
+    Ok(_)=> temp_dir.move_to(&into,".git*").await,
     Err(err)=> Err(Error::from_raw_os_error(err.raw_code())),
   }
 }

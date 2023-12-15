@@ -1,5 +1,4 @@
 mod ser;
-mod copy_dir;
 pub(crate) mod api;
 mod tests;
 

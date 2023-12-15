@@ -18,7 +18,7 @@ use std::{
 /// ```rs
 /// copy_dir_all("./test/repo","./test/xd",".git*").await?;
 /// ```
-pub async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,exceptions: &str)-> io::Result<()> {
+pub(crate) async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,exceptions: &str)-> io::Result<()> {
   let except=regex::Regex::new(exceptions).unwrap();
   let mut queue=LinkedList::<(Box<Path>,Box<Path>)>::from_iter([(from.as_ref().into(),to.as_ref().into())]);
 
@@ -47,5 +47,35 @@ pub async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,exception
 }
 
 
+pub(crate) struct TempDir {
+  path: Box<Path>
+}
+
+impl Drop for TempDir {
+  fn drop(&mut self) {
+    let path=std::mem::replace(&mut self.path,Path::new("").into());
+    tokio::task::spawn(fs::remove_dir_all(path));
+  }
+}
+
+impl TempDir {
+
+  pub(crate) async fn new()-> io::Result<Self> {
+    let path=Path::new("");
+    fs::create_dir_all(path).await?;
+    
+    Ok(Self {
+      path: path.into()
+    })
+  }
+
+  pub(crate) fn path(&self)-> &Path {
+    &self.path
+  }
+
+  pub(crate) async fn move_to<P: AsRef<Path>>(self,to: P,exceptions: &str)-> io::Result<()> {
+    copy_dir_all(&self.path,to,exceptions).await
+  }
+}
 
 
