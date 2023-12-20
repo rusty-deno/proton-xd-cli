@@ -61,9 +61,10 @@ impl Drop for TempDir {
 impl TempDir {
 
   pub(crate) async fn new()-> io::Result<Self> {
-    let path=Path::new("");
+    let time=format!("temp-{:#?}",std::time::SystemTime::now());
+    let path=Path::new(&time);
     fs::create_dir_all(path).await?;
-    
+
     Ok(Self {
       path: path.into()
     })
