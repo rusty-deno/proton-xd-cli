@@ -7,7 +7,7 @@ use super::{
   build::Build,
   init::Init,
   new::New,
-  dev::Dev
+  dev::Dev, Operation
 };
 
 
@@ -24,13 +24,15 @@ impl App {
   pub fn new()-> Self {
     Self::parse()
   }
+}
 
-  pub async fn spawn(self)-> io::Result<()> {
+impl Operation for App {
+  async fn run(self)-> io::Result<()> {
     match self {
-      App::Build(builder)=> builder.build().await,
-      App::Init(initializer)=> initializer.init().await,
-      App::New(initilizer)=> initilizer.init().await,
-      _=> todo!()
+      App::Build(app)=> app.run().await,
+      App::New(app)=> app.run().await,
+      App::Init(app)=> app.run().await,
+      App::Dev(app)=> app.run().await,
     }
   }
 }

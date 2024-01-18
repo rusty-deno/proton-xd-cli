@@ -1,7 +1,7 @@
 
 use tokio::*;
 use clap::Parser;
-use super::config::Config;
+use super::{config::Config, Operation};
 
 
 use crate::{
@@ -21,8 +21,8 @@ pub struct Init {
   js: Option<bool>
 }
 
-impl Init {
-  pub async fn init(self)-> io::Result<()> {
+impl Operation for Init {
+  async fn run(self)-> io::Result<()> {
     ensure_fresh_dir("./").await?;
 
     let url=url(&ensure_template(self.template),ensure_lang(self.js));

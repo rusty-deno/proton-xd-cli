@@ -15,3 +15,9 @@ pub(crate) use writer::*;
 pub(crate) use consts::*;
 
 
+pub trait Operation {
+  async fn run(self)-> std::io::Result<()>;
+}
+
+
+

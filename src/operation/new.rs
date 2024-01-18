@@ -11,7 +11,7 @@ use requestty::{
 
 use super::{
   config::Config,
-  CONFIG_FILE_NAME
+  CONFIG_FILE_NAME, Operation
 };
 
 
@@ -29,8 +29,8 @@ pub struct New {
 }
 
 
-impl New {
-  pub async fn init(self)-> io::Result<()> {
+impl Operation for New {
+  async fn run(self)-> io::Result<()> {
     let path=&self.ensure_path();
     fs::create_dir_all(path).await?;
     ensure_fresh_dir(path).await?;
@@ -42,7 +42,9 @@ impl New {
 
     Config::new(path.file_name().unwrap().to_str().unwrap()).save(CONFIG_FILE_NAME).await
   }
+}
 
+impl New {
   fn ensure_path(&self)-> PathBuf {
     match &self.path {
       Some(path)=> path.into(),

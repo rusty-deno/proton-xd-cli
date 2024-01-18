@@ -8,7 +8,7 @@ use operation::*;
 #[tokio::main]
 async fn main() {
   let args=App::new();
-  args.spawn().await.unwrap()
+  args.run().await.unwrap()
 }
 
 

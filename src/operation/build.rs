@@ -13,7 +13,7 @@ use super::{
     ToArgs,
     Str
   },
-  MAIN
+  MAIN, Operation
 };
 
 
@@ -23,8 +23,8 @@ pub struct Build {
   out: Box<Path>,
 }
 
-impl Build {
-  pub async fn build(self)-> io::Result<()> {
+impl Operation for Build {
+  async fn run(self)-> io::Result<()> {
     let mut config=Config::find_config_file().await?;
     config.compiler_options.output.get_or_insert(self.out);
     let args=config.to_flags().into_iter().filter_map(to_boxed_os_str);
