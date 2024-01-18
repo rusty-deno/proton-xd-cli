@@ -8,7 +8,7 @@ use std::path::Path;
 
 use crate::{
   TEMPLATES,
-  ser::config::Str
+  operation::config::Str
 };
 
 use requestty::{

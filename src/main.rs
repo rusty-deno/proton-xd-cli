@@ -1,13 +1,13 @@
-mod ser;
+mod operation;
 pub(crate) mod api;
 mod tests;
 
 
-use ser::*;
+use operation::*;
 
 #[tokio::main]
 async fn main() {
-  let args=Operation::new();
+  let args=App::new();
   args.spawn().await.unwrap()
 }
 

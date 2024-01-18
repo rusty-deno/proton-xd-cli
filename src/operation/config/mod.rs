@@ -26,7 +26,7 @@ pub(crate) trait ToArgs {
 }
 
 
-pub(in crate::ser::config) trait Parse {
+pub(in crate::operation::config) trait Parse {
   fn parse(&self,option: &str)-> Option<Str>;
 }
 
@@ -80,7 +80,7 @@ impl Parse for Str {
 
 #[cfg(test)]
 mod tests {
-  use crate::ser::config::ToArgs;
+  use crate::operation::config::ToArgs;
 
 
   #[tokio::test]

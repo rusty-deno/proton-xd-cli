@@ -2,7 +2,7 @@
 #[cfg(test)]
 mod test {
   use tokio::test;
-  use crate::ser::TEMPLATES;
+  use crate::operation::TEMPLATES;
 
   use requestty::{
     Question,

@@ -18,6 +18,6 @@ requestty = "0.5.0"
 crossterm = "0.27.0"
 serde_json = "1.0.108"
 clap-verbosity-flag = "2.1.0"
-tokio = { version = "1.35.0", features = ["fs","rt","process","macros","rt-multi-thread"] }
+tokio = { version = "1.35.0", features = ["fs", "rt", "process", "macros", "rt-multi-thread"] }
 serde = { version = "1.0.193", features = ["derive"] }
 

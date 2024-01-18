@@ -6,7 +6,7 @@ use super::config::Config;
 
 use crate::{
   api::*,
-  ser::CONFIG_FILE_NAME
+  operation::CONFIG_FILE_NAME
 };
 
 
