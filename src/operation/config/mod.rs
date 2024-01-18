@@ -2,6 +2,7 @@
 mod config;
 mod unstable;
 mod permission;
+mod dev_options;
 mod compiler_options;
 
 use unstable::*;

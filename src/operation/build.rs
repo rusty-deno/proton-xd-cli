@@ -11,9 +11,10 @@ use super::{
   config::{
     Config,
     ToArgs,
-    Str
+    Str,
   },
-  MAIN, Operation
+  MAIN,
+  Operation
 };
 
 

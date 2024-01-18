@@ -1,7 +1,6 @@
 
 use clap::Parser;
-
-use super::Operation;
+use super::{Operation, config::Config};
 
 
 
@@ -10,7 +9,10 @@ pub struct Dev;
 
 impl Operation for Dev {
   async fn run(self)-> std::io::Result<()> {
-    todo!()
+    let _config=Config::find_config_file().await?;
+
+
+    Ok(())
   }
 }
 

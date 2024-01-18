@@ -1,6 +1,10 @@
+
+mod tests;
+#[macro_use]
+mod macros;
 mod operation;
 pub(crate) mod api;
-mod tests;
+
 
 
 use operation::*;
