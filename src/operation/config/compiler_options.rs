@@ -3,11 +3,6 @@ use std::{
   collections::LinkedList
 };
 
-use serde::{
-  Deserialize,
-  Serialize
-};
-
 use super::{
   ToArgs,
   Parse
@@ -17,7 +12,7 @@ use super::{
 
 
 deno_option_type! {
-  CompilerOptions: {
+  CompilerOptions {
     pub include: Option<Box<Path>> = None,
     pub output: Option<Box<Path>> = None,
     pub target: Option<Box<str>> = None,
