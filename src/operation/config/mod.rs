@@ -7,10 +7,10 @@ mod compiler_options;
 
 use unstable::*;
 use permission::*;
+use dev_options::*;
 use compiler_options::*;
 
-pub(crate) use config::*;
-
+pub use config::*;
 
 use super::Writer;
 use std::path::Path;
@@ -18,11 +18,11 @@ use std::path::Path;
 
 
 
-pub(crate) type Str=Box<str>;
-pub(crate) type Array<T>=Box<[T]>;
+pub type Str=Box<str>;
+pub type Array<T>=Box<[T]>;
 
 
-pub(crate) trait ToArgs {
+pub trait ToArgs {
   fn to_flags(&self)-> std::collections::LinkedList<Option<Str>>;
 }
 

@@ -24,7 +24,7 @@ use crossterm::style::{
 
 
 
-pub(crate) fn confirm(msg: &str,default: bool)-> bool {
+pub fn confirm(msg: &str,default: bool)-> bool {
   let q=Question::confirm(msg).default(default).build();
 
   match prompt_one(q) {
@@ -34,7 +34,7 @@ pub(crate) fn confirm(msg: &str,default: bool)-> bool {
 }
 
 
-pub(crate) async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
+pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   let path=path.as_ref();
 
   // Checks whether there are any files at `path`.
@@ -63,7 +63,7 @@ fn rgb((name,r,g,b): (&str,u8,u8,u8))-> Str {
   style(name).with(Color::Rgb { r,g,b }).to_string().into_boxed_str()
 }
 
-pub(crate) fn ensure_template(template: Option<Str>)-> Str {
+pub fn ensure_template(template: Option<Str>)-> Str {
   if let Some(template)=template {
     return template;
   }
@@ -101,12 +101,12 @@ fn lang<'a>(js: bool)-> &'a str {
 }
 
 
-pub(crate) fn url(template: &str,lang: &str)-> Str {
+pub fn url(template: &str,lang: &str)-> Str {
   format!("https://github.com/proton-xd-templates/{template}-template-{lang}").into_boxed_str()
 }
 
 
-pub(crate) async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
+pub async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
   let temp_dir=TempDir::new().await?;
 
   match git2::Repository::clone(url,&temp_dir.path()) {

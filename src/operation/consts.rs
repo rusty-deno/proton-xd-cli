@@ -1,12 +1,12 @@
 
 
-pub(crate) const CONFIG_FILE_NAME: &str="proton-config.json";
-pub(crate) const FFI_DIR: &str="https://github.com/kakashi-69-xd/proton-xd/bindings/bin";
-pub(crate) const MAIN: &str="proton-src/main";
+pub const CONFIG_FILE_NAME: &str="proton-config.json";
+pub const FFI_DIR: &str="https://github.com/kakashi-69-xd/proton-xd/bindings/bin";
+pub const MAIN: &str="proton-src/main";
 
 
 /// template names with their theme color in rgb format
-pub(crate) const TEMPLATES: [(&str,u8,u8,u8); 10]=[
+pub const TEMPLATES: [(&str,u8,u8,u8); 10]=[
   ("Aleph",0xff,0x33,0x69),
   ("Fresh",0xff,0xec,0x51),
   ("Next",0x12,0x77,0xed),

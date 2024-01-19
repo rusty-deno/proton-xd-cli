@@ -11,17 +11,17 @@ use serde::{
 
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(untagged)]
-pub(crate) enum Permission {
+pub enum Permission {
   Bool(bool),
   Permissions(Array<Str>)// Array<T>=Box<[T]>, Str=Box<str>
 }
 
-pub(crate) type Perm=Option<Permission>;
+pub type Perm=Option<Permission>;
 
 
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case",untagged)]
-pub(crate) enum Permissions {
+pub enum Permissions {
   Bool(bool),
   Permissions {
     //allow

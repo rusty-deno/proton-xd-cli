@@ -23,26 +23,27 @@ use serde::{
 
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
-pub(crate) struct Config {
-  pub(crate) name: Str,
-  pub(crate) main: Option<Str>,
-  pub(crate) language: Option<Language>,
-  pub(crate) compiler_options: CompilerOptions,
-  pub(crate) permissions: Permissions,
-  pub(crate) unstable: Unstable
+pub struct Config {
+  pub name: Str,
+  pub main: Option<Str>,
+  pub language: Option<Language>,
+  pub compiler_options: CompilerOptions,
+  pub dev_options: DevOptions,
+  pub permissions: Permissions,
+  pub unstable: Unstable
 }
 
 
 #[derive(Deserialize,Serialize,Debug,Default)]
 #[serde(rename_all="lowercase")]
-pub(crate) enum Language {
+pub enum Language {
   #[default]
   TypeScript,Ts,
   JavaScript,Js
 }
 
 impl Language {
-  pub(crate) fn extension<'a>(self)-> &'a str {
+  pub fn extension<'a>(self)-> &'a str {
     use Language::*;
     match self {
       TypeScript|Ts=> "ts",
@@ -54,7 +55,7 @@ impl Language {
 
 
 impl Config {
-  pub(crate) fn new(name: &str)-> Config {
+  pub fn new(name: &str)-> Config {
     Config {
       name: name.into(),
       ..Default::default()
@@ -62,7 +63,7 @@ impl Config {
   }
 
   /// finds the config file and switches to that directory
-  pub(crate) async fn find_config_file()-> io::Result<Config> {
+  pub async fn find_config_file()-> io::Result<Config> {
     let not_found: &str=&format!("No `{CONFIG_FILE_NAME}` file found!");
 
     while let Some(_)=env::current_dir()?.parent() {
@@ -81,7 +82,7 @@ impl Config {
     Err(Error::new(NotFound,not_found))
   }
 
-  pub(crate) async fn save<P: AsRef<Path>>(self,path: P)-> io::Result<()> {
+  pub async fn save<P: AsRef<Path>>(self,path: P)-> io::Result<()> {
     let mut w=Writer::new();
     let mut serializer=serde_json::Serializer::pretty(&mut w);
     self.serialize(&mut serializer)?;
@@ -98,6 +99,7 @@ impl Default for Config {
       main: Some(MAIN.into()),
       language: Some(Default::default()),
       compiler_options: Default::default(),
+      dev_options: Default::default(),
       permissions: Permissions::default(),
       unstable: Unstable::default()
     }

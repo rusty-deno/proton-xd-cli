@@ -11,18 +11,18 @@ use std::collections::LinkedList;
 
 #[derive(Deserialize,Serialize,Debug)]
 #[serde(rename_all="kebab-case")]
-pub(crate) struct Unstable {
-  pub(crate) bare_node_builtins: Option<bool>,
-  pub(crate) byonm: Option<bool>,
-  pub(crate) workspces: Option<bool>,
-  pub(crate) broadcast: Option<bool>,
-  pub(crate) ffi: Option<bool>,
-  pub(crate) fs: Option<bool>,
-  pub(crate) kv: Option<bool>,
-  pub(crate) net: Option<bool>,
-  pub(crate) http: Option<bool>,
-  pub(crate) worker_options: Option<bool>,
-  pub(crate) cron: Option<bool>
+pub struct Unstable {
+  pub bare_node_builtins: Option<bool>,
+  pub byonm: Option<bool>,
+  pub workspces: Option<bool>,
+  pub broadcast: Option<bool>,
+  pub ffi: Option<bool>,
+  pub fs: Option<bool>,
+  pub kv: Option<bool>,
+  pub net: Option<bool>,
+  pub http: Option<bool>,
+  pub worker_options: Option<bool>,
+  pub cron: Option<bool>
 }
 
 impl Default for Unstable {

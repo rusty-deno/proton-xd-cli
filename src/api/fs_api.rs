@@ -18,7 +18,7 @@ use std::{
 /// ```rs
 /// copy_dir_all("./test/repo","./test/xd",".git*").await?;
 /// ```
-pub(crate) async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,exceptions: &str)-> io::Result<()> {
+pub async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,exceptions: &str)-> io::Result<()> {
   let except=regex::Regex::new(exceptions).unwrap();
   let mut queue=LinkedList::<(Box<Path>,Box<Path>)>::from_iter([(from.as_ref().into(),to.as_ref().into())]);
 
@@ -47,7 +47,7 @@ pub(crate) async fn copy_dir_all<F: AsRef<Path>,T: AsRef<Path>>(from: F,to: T,ex
 }
 
 
-pub(crate) struct TempDir {
+pub struct TempDir {
   path: Box<Path>
 }
 
@@ -60,7 +60,7 @@ impl Drop for TempDir {
 
 impl TempDir {
 
-  pub(crate) async fn new()-> io::Result<Self> {
+  pub async fn new()-> io::Result<Self> {
     let time=format!("temp-{:#?}",std::time::SystemTime::now());
     let path=Path::new(&time);
     fs::create_dir_all(path).await?;
@@ -70,11 +70,11 @@ impl TempDir {
     })
   }
 
-  pub(crate) fn path(&self)-> &Path {
+  pub fn path(&self)-> &Path {
     &self.path
   }
 
-  pub(crate) async fn move_to<P: AsRef<Path>>(self,to: P,exceptions: &str)-> io::Result<()> {
+  pub async fn move_to<P: AsRef<Path>>(self,to: P,exceptions: &str)-> io::Result<()> {
     copy_dir_all(&self.path,to,exceptions).await
   }
 }
