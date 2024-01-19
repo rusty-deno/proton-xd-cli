@@ -102,3 +102,23 @@ macro_rules! deno_option_type {
   };
 }
 
+
+#[macro_export]
+macro_rules! command {
+  (
+    cmd: $cmd:literal,
+    config: $config:expr
+  )=> {
+    let args=crate::config::ToArgs::to_flags(&$config).into_iter().filter_map(crate::api::to_boxed_os_str);
+    let mut cmd=tokio::process::Command::new("deno");
+    cmd.arg($cmd);
+    cmd.args(args);
+    // # Example "./proton-src/main.ts"
+    cmd.arg(format!("{}.{}",$config.main.unwrap_or(crate::MAIN.into()),$config.language.unwrap_or_default().extension()));
+
+    match cmd.spawn()?.wait().await {
+      Err(err)=> Err(std::io::Error::new(err.kind(),"Some error occured while running deno.\nTry upgrading to the latest version of deno")),
+      _=> Ok(()),
+    }
+  };
+}

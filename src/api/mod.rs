@@ -3,8 +3,11 @@ mod fs_api;
 use tokio::*;
 use fs_api::*;
 use io::Error;
-use std::path::Path;
 
+use std::{
+  path::Path,
+  ffi::OsStr
+};
 
 use crate::{
   TEMPLATES,
@@ -115,3 +118,6 @@ pub async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {
   }
 }
 
+pub fn to_boxed_os_str(str: Option<Str>)-> Option<Box<OsStr>> {
+  Some(OsStr::new(str?.as_ref()).into())
+}
